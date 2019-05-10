@@ -1,0 +1,209 @@
+#Configure network
+#ssh
+SshMessage
+$ nano /etc/motd
+$ /etc/ssh/sshd_config
+Banner /etc/ssh-banner
+/etc/profile.d/motd.sh
+#!/bin/bash
+echo -e "
+#################################### 
+Welcome to `hostname`, you are logged in as `whoami`
+# This system is running `cat /etc/redhat-release`
+# kernel is `uname -r`# Uptime is `uptime | sed 's/.*up ([^,]*), .*/1/'`
+# Mem total `cat /proc/meminfo | grep MemTotal | awk {'print $2'}` kB
+###################################"
+$ systemctl restart sshd.service
+
+User&management
+$ useradd your_new_username
+$ passwd your_new_username
+$ groupadd your_new_group
+$ usermod -G your_new_group your_new_username
+$ id your_new_username
+
+##CRONJONB
+$ crontab -e
+create the cron job
+$ crontab -e 
+
+Usage:
+ crontab [options] file
+ crontab [options]
+ crontab -n [hostname]
+
+Options:
+ -u <user>  define user
+ -e         edit user's crontab
+ -l         list user's crontab
+ -r         delete user's crontab
+ -i         prompt before deleting
+ -n <host>  set host in cluster to run users' crontabs
+ -c         get host in cluster to run users' crontabs
+ -s         selinux context
+ -x <mask>  enable debugging
+
+*/5 * * * * echo `date` "Hello world" >>$HOME/cron-helloworld.txt
+<minute> <hour> <day of the month> <month of the year> <day of the week><command>
+
+##YUM
+yum check-update
+yum search keyword_package_name
+yum info package_name
+yum deplist package_name
+yum clean packages
+yum clean metadata
+yum clean dbcache
+yum clean all
+yum makecache
+yum -y update --skip-broken
+#yumPriorities
+yum install yum-plugin-priorities
+/etc/yum/pluginconf.d/priorities.conf
+
+
+
+$ nmtui
+#Bonding two Ethernet devices to increase bandwidth and provide redundancy
+Type of bonding
+mode=0 (balance-rr)  Round-robin : It the default mode. provides load balancing and fault tolerance.
+mode=1 (active-backup) : Active-backup policy: only one slave in the bond is active when the active slave fails other one become active. This mode provides fault tolerance.
+mode=2 (balance-xor) : XOR policy:  This mode provides load balancing and fault tolerance.
+mode=3 (broadcast)  Broadcast policy: transmits everything on all slave interfaces. This mode provides fault tolerance.
+mode=4 (802.3ad)  : IEEE 802.3ad Dynamic link aggregation that share the same speed and duplex settings.
+mode=5 (balance-tlb) : Adaptive transmit load balancing
+mode=6 (balance-alb) : Adaptive load balancing:
+#install package groups
+$ yum -y groupinstall "Base" "Development Libraries" "Development Tools"
+$ yum -y install policycoreutils-python
+#disable Selinux
+-mode permissive
+$ sudo setenforce 0
+-disable
+$ sudo vim /etc/selinux/config
+#Config repo local
+$ vi /etc/yum.repos.d/CentOS.repo
+# Changing the time zone and updating the
+hardware clock
+$ yum install tzdata
+$ tzselect
+# install ntp
+$ systemctl start ntpd
+$ systemctl enable ntpd
+- /etc/ntp.conf
+server 0.id.pool.ntp.org
+server 2.asia.pool.ntp.org
+server 1.asia.pool.ntp.org
+$ ntpq –p
+#DNS server
+$ yum -y install bind bind-utils
+#ZoneDomain
+zone “loadportas.net” IN {
+       type master;
+       file “/etc/named/fwd.local.db”;
+       allow-update { none; };
+};
+
+zone “0.168.192.in-addr.arpa” IN {
+       type master;
+       file “/etc/named/0.168.192.db”;
+       allow-update { none; };
+};
+#Named.conf
+options {
+		listen-on port 53 { 127.0.0.1; 192.168.122.0 any; };
+#       listen-on-v6 port 53 { ::1; };
+        directory	"/var/named";
+        dump-file	"/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+        recursing-file  "/var/named/data/named.recursing";
+        secroots-file   "/var/named/data/named.secroots";
+        allow-query     { localhost; 192.168.122.0; any; };
+        allow-query-cache { localhost; 192.168.122.0; any; };
+
+# /var/named/fwd.local.db
+$TTL    86400
+@      	IN     	SOA     loadportas.net. root.loadportas.net. (
+                2018092501	;Serial
+                3600            ;Refresh
+                1800            ;Retry
+                604800          ;Expire
+                86400           ;Minimum TTL
+)
+ 
+@	IN	NS	ns1.loadportas.net.
+@	IN	NS	ns2.loadportas.net.
+@	IN	A	192.168.122.120
+ns1     IN	A	192.168.122.120
+ns2     IN	A	192.168.122.120
+www     IN	CNAME   loadportas.net.
+blog    IN	A	192.168.122.120
+
+# /var/named/0.168.192.db
+$TTL    86400
+@	IN	SOA     loadportas.net. root.loadportas.net. (
+                2018092501	;Serial
+                3600            ;Refresh
+                1800            ;Retry
+                604800          ;Expire
+                86400           ;Minimum TTL
+)
+ 
+        IN	NS	ns1.loadportas.net.
+        IN	NS	ns2.loadportas.net.
+@	IN	A	192.168.122.120
+ns1     IN	A	192.168.122.120
+ns2     IN	A	192.168.122.120
+50	IN	PTR     loadportas.net.
+50	IN	PTR     blog.loadportas.net.
+
+
+
+
+
+
+
+
+
+
+==========
+NAGIOS---
+======--
+$ useradd nagios && passwd nagios
+$ groupadd nagcmd
+$ usermod -a -G nagcmd nagios
+$ usermod -a -G nagcmd apache
+$ yum install httpd php gcc glibc glibc-comman gd gd-devel make net-snmp openssl-devel xinetd unzip -y
+$ cd /opt
+$ wget -c ---> nagios link
+$ tar -zxvf
+$ ./configure --with-command-group=nagcmd
+$ make all
+$ make install
+$ make install-init
+$ make install-commandmode
+$ make install-config
+$ make install-webconf
+$ cp -R contrib/eventhandlers/ /usr/local/nagios/libexec/
+$ chown -R nagios:nagios /usr/local/nagios/libexec/eventhandlers
+$ /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+$ htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+$ systemctl restart httpd && systemctl restart nagios
+$ chkconfig --add nagios && chkconfig --level 35 nagios on
+$ systemctl enable httpd
+$ firewall-cmd --permanent --add-service=http
+$ firewall-cmd --reload
+$ yum install nagios-plugins-all nagios-plugins-nrpe
+~~config
+vi /usr/local/nagios/etc/resource.cfg.
+# $USER1$=/usr/local/nagios/libexec 
+$USER1$=//usr/lib64/nagios/plugins
+
+$
+
+
+
+
+
+

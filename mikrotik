@@ -1,0 +1,179 @@
+ Fitur-Fitur Mikrotik
+
+    Address List : Pengelompokan IP Address berdasarkan nama
+    Asynchronous : Mendukung serial PPP dial-in / dial-out, dengan otentikasi CHAP, PAP, MSCHAPv1 dan MSCHAPv2, Radius, dial on demand, modem pool hingga 128 ports.
+    Bonding : Mendukung dalam pengkombinasian beberapa antarmuka ethernet ke dalam 1 pipa pada koneksi cepat.
+    Bridge :  Mendukung fungsi  bridge spinning  tree,  multiple  bridge interface, bridging firewalling.
+    Data Rate Management : QoS berbasis HTB dengan penggunaan burst, PCQ, RED, SFQ, FIFO queue, CIR, MIR, limit antar peer to peer
+    DHCP : Mendukung DHCP tiap antarmuka; DHCP Relay;  DHCP Client, multiple network DHCP; static and dynamic DHCP leases.
+    Firewall dan NAT : Mendukung pemfilteran koneksi peer to peer, source NAT dan destination NAT. Mampu memfilter berdasarkan  MAC, IP address,  range port, protokol IP, pemilihan  opsi protokol seperti ICMP, TCP Flags dan MSS.
+    Hotspot  : Hotspot  gateway dengan otentikasi  RADIUS.  Mendukung limit  data rate, SSL ,HTTPS.
+    IPSec : Protokol AH dan ESP untuk IPSec; MODP Diffie-Hellmann  groups 1, 2, 5; MD5 dan algoritma SHA1 hashing; algoritma enkirpsi menggunakan DES, 3DES, AES-128, AES-192, AES-256; Perfect Forwarding Secresy (PFS) MODP groups 1, 2,5
+    ISDN   :  mendukung  ISDN   dial-in/dial-out.   Dengan otentikasi   PAP,   CHAP, MSCHAPv1 dan MSCHAPv2, Radius. Mendukung  128K bundle, Cisco HDLC, x751, x75ui, x75bui line protokol.
+    M3P : MikroTik Protokol Paket Packer untuk wireless links dan ethernet.
+    MNDP : MikroTik Discovery Neighbour Protokol, juga mendukung  Cisco Discovery Protokol (CDP).
+    Monitoring  / Accounting : Laporan  Traffic  IP, log, statistik graph yang dapat diakses melalui HTTP.
+    NTP : Network Time Protokol untuk server dan clients; sinkronisasi menggunakan system GPS.
+    Poin to Point Tunneling Protocol : PPTP, PPPoE dan L2TP Access Consentrator; protokol otentikasi menggunakan  PAP, CHAP, MSCHAPv1, MSCHAPv2; otentikasi dan laporan Radius; enkripsi MPPE; kompresi  untuk PPoE; limit data rate.
+    Proxy : Cache untuk FTP dan HTTP proxy server,  HTTPS proxy; transparent proxy untuk DNS  dan HTTP; mendukung protokol SOCKS;  mendukung parent proxy; static DNS.
+    Routing : Routing statik dan dinamik; RIP v1/v2, OSPF v2, BGP v4.
+    SDSL : Mendukung Single Line DSL; mode pemutusan jalur koneksi dan jaringan.
+    Simple Tunnel : Tunnel IPIP dan EoIP (Ethernet over IP).
+    SNMP : Simple Network Monitoring Protocol mode akses read-only.
+    Synchronous  : V.35, V.24, E1/T1,  X21,  DS3 (T3)  media ttypes;  sync-PPP, Cisco HDLC; Frame  Relay line protokol; ANSI-617d  (ANDI atau annex D) dan Q933a (CCITT atau annex A); Frame Relay jenis LMI.
+    Tool :  Ping, Traceroute; bandwidth test; ping flood; telnet; SSH; packet sniffer; Dinamik DNS update.
+    UPnP : Mendukung antarmuka Universal Plug and Play.
+    VLAN : Mendukung Virtual LAN IEEE 802.1q untuk jaringan ethernet dan wireless; multiple VLAN; VLAN bridging.
+    VoIP : Mendukung aplikasi voice over IP.
+    VRRP : Mendukung Virtual Router Redudant Protocol.
+    WinBox : Aplikasi  mode GUI untuk meremote dan mengkonfigurasi  MikroTik RouterOS.
+
+
+##Parameter Mode Wireless Mikrotik
+ AP modes:
+> ap-bridge : mode standard untuk Access Point.
+> bridge : sama seperti mode ap-bridge tetapi hanya menerima satu client.
+> wds-slave : mode ap-bridge tetapi mampu untuk melakukan scan terhadap AP yang memiliki SSID yang sama dan membangun WDS link ke AP tersebut. Jika terputus maka akan dilakukan scaning ulang dan akan terkoneksi kembali.
+Station modes:
+> station : Mode Client paling sederhana
+> station-wds : mode station yang mengaktifkan WDS bridge
+> station-pseudobridge : mode station tetapi ditabahkan fungsi MAC translation sehingga interface wireless bisa dimasukkan ke dalam bridge.
+> station-pseudobridge-clone : mode station yang menggunakan fungsi station-bridge- clone-mac address
+
+Special modes:
+> alignment-only : mengaktifkan mode align transmit untuk digunakan sebagai membantu pointing antenna.
+> nstreme-dual-slave : digunakan jika ingin menggunakan Dual-Nstreme
+Parameter Band
+band : Opsi untuk menentukan standard wireless yang ingin digunakan
+> 2.4ghz-b – menggunakan standard IEEE 802.11b
+> 2.4ghz-b/g - IEEE 802.11g (supports also legacy IEEE 802.11b protocol).
+> 2.4ghz-g-turbo - IEEE 802.11g menggunakan double channel yang kecepatan teoritisnya adalah hingga 108 Mbit.
+> 2.4ghz-onlyg – hanya menggunaan standard IEEE 802.11g
+> 2ghz-10mhz – variasi dari IEEE 802.11g dengan menggunakan setengah dari lebar band standard (air rate of up to 27Mbit)
+> 2ghz-5mhz - variasi dari IEEE 802.11g dengan menggunakan seperempat dari lebar band standard (air rate of up to13.5Mbit)
+> Turbo channel hanya support di card non-N dan hanya ada di ROS versi 2.xx,3.xx dan 4.xx.
+
+> 5ghz – menggunakan standard IEEE 802.11a 54Mbit.
+> 5ghz-turbo - IEEE 802.11a menggunakan double channel yang kecepatan teoritisnya adalah hingga 108 Mbit.
+> 5ghz-10mhz - variasi dari IEEE 802.11a dengan menggunakan setengah dari lebar band standard (air rate of up to 27Mbit)
+> 5ghz-5mhz - variasi dari IEEE 802.11a dengan menggunakan seperempat dari lebar band standard (air rate of up to 13.5Mbit)
+> Turbo channel hanya support di card non-N dan hanya ada di ROS versi 2.xx,3.xx dan 4.xx.
+> Penggunaan Band 5ghz ini harus seizin dept. kominfo, tidak boleh digunakan sembarangan.
+
+Parameter Frequency, Scan, Scan list
+frequency – Frequency yang digunakan untuk AP.
+> Parameter ini akan diabaikan Jika pada pernagkat diaktifkan mode “client”.
+> ssid (text) – Sebagai identitas dari jaringan wireless.
+> scan-list – nilai default adalah channel ISM (standard channel) sesuai dengan band yang digunakan. > Scan list bisa berupa range, list dari channel yang dipisahkan dengan tanda comma atau bisa juga gabungan dari keduanya.
+> Contoh: scan-list=default,2222,2312-2362
+> Dari scan list tersebut perangkat akan melakukan scan di default channel dan beberapa range  frequency custom.
+> Penggunaan custom channel bergantung dari setting “channel-mode”
+Parameter Tx Rate
+default-ap-tx-limit (integer; default: 0) – adalah limit traffic rate untuk pengiriman data dari AP ke tiap client (bps).
+0 – berarti tanpa limit
+
+default-client-tx-limit (integer; default: 0) – adalah limit traffic rate untuk pengiriman data dari tiap client ke AP (bps). Hanya bekerja jika client sama-sama menggunakan mikrotik.
+0 – berarti tanpa limit
+
+Parameter Checklist
+> default-authentication (default value: yes) :
+Jika digunakan mode AP maka semua client yang tidak dibatasi di access-list akan diautentikasi dan bisa terkoneksi.
+Jika digunakan di mode station maka wireless bisa terkoneksi ke AP manapun yang tidak dibatasi di connect-list.
+
+> default-forwarding (default value: yes) :
+Adalah parameter yang digunakan untuk forwarding traffic dari client ke client yang lain dalam AP yang sama. Bisa dibatasi lebih spesifik per clientnya di access-list.
+
+> hide-ssid (default value: no) :
+
+yes – jika diaktifkan maka AP tidak akan memasukkan informasi SSID pada beacon frame dan tidak akan memberikan frame balasan berisi informasi SSID jika ada permintaan informasi SSID.
+
+no – AP akan memasukkan informasi SSID pada frame beacon dan akan memberikan informasi SSID jika ada permintaan informasi SSID.
+Setting ini hanya berpengaruh jika menggunakan mode AP, sebenarnya tidak berpengaruh banyak pada security karena informasi SSID tetap dimasukkan pada frame yang lain (bukan beacon frame).
+
+##Penjelasan Pesan Error pada Halaman Login Hotspot Mikrotik 
+
+General non-fatal errors:
+
+You are not logged in:
+Pesan error ini muncul ketika kita mencoba mengakses status page (http://iphotspot/status) atau mencoba log off ketika akun kita sedang tidak login 
+Solusi: login dulu
+Already authorizing, retry later:
+Proses autentikasi masih dalam proses, sementara user sudah minta untuk autentikasi lagi, padahal proses sebelumnya belum selesai. 
+Solusi: Tunggu sampai proses selesai, kemudian coba lagi. 
+
+Chap-missing = web browser did not send challenge response (try again, enable JavaScript) :
+User mencoba untuk login dengan metode HTTP-CHAP menggunakan MD5 hash, tetapi server HotSpot tidak tahu challange yang digunakan untuk hash. Hal ini dapat terjadi jika kita mencet tombol Back pada web browser; jika JavaScript tidak diaktifkan di browser web; jika halaman login.html tidak valid; atau jika nilai challange telah berakhir pada server (lebih dari 1 jam tidak aktif). 
+Solusi: menginstruksikan browser untuk memuat ulang (refresh) halaman login biasanya membantu jika JavaScript diaktifkan dan halaman login.html memang valid.
+
+Invalid username ($(username)): this MAC address is not yours:
+User mencoba untuk log in menggunakan username MAC address yang berbeda dari MAC address user yang seharusnya.
+Solusi: MAC Address yang digunakan pada user ketika login harus cocok dengan database yang ada di server hotspot. Silakan hibungi pengelola hotspot jika muncul pesan error ini.
+
+Session limit reached ($(error-orig)) :
+Pesan error ini muncul ketika user hotspot sudah kehabisan session. Hal ini terjadi ketika user hotspot tersebut dibatasi waktu login nya, misal Trial user yang dibatasi cuma 10 menit saja untuk login.
+Solusi: Tunggu beberapa lama, kemudian coba login lagi. Jika masih muncul pesan error nya, hubungi pengelola hotspot untuk memastikan user anda tidak dilimit session nya.
+
+Hotspot service is shutting down :
+Sistem pada RouterOS (hotspot server) sedang melakukan restart atau pas lagi shutdown.
+Solusi: Tunggu sampai service hotspot nya bisa digunakan lagi
+General fatal errors:
+
+Internal error ($(error-orig)) :
+Pesan error ini seharusnya tidak pernah terjadi. Tapi jika muncul, halaman error.html akan menampilkan pesan eror ini (error-orig akan menjelaskan apa yang terjadi).
+Solusi: Perbaiki error yang dilaporkan pada pesan error tersebut (Ini dilakukan oleh pengelola hotspot)
+
+Configuration error ($(error-orig)) :
+Ada yang tidak benar pada setingan Server Hotspot nya, sehingga muncul pesan error (error-orig akan menjelaskan apa yang terjadi).  
+Solusi: Perbaiki error yang dilaporkan pada pesan error tersebut (Ini dilakukan oleh pengelola hotspot)
+
+Cannot assign ip address – no more free addresses from pool :
+User tidak bisa mendapatkan IP Address dari IP Pool yang disediakan Server Hotspot, karena tidak ada IP Address lagi yang tersedia (IP Address nya habis/terpakai semua)
+Solution: Pastikan Server Hotspot nya punya IP Address yang cukup pada IP Pool nya. Kalau misal User nya terlalu banyak dari IP Address yang disediakan, bisa gunakan 2 Server Hotspot.
+
+Local HotSpot user database non-fatal errors:
+
+Invalid username or password  
+Pesan error ini muncul jika user salah memasukkan username dan atau password nya.
+Solusi : cek lagi user dan password nya, pastikan sudah benar.
+
+User $(username) is not allowed to log in from this MAC address
+User mencoba login dari MAC Address yang berbeda dengan yang ada di User Database Server Hotspot. 
+Solusi : Login dengan MAC Address yang sesuai, atau hilangkan limitasi MAC Address pada Server Hotspot nya.
+
+user $(username) has reached uptime limit : 
+Pesan error ini muncul ketika user dibatasi uptime nya dan sudah melewati batas uptime limit.
+Solusi : Minta pengelola hotspot untuk menghilangkan uptime limit nya
+
+user $(username) has reached traffic limit dan limit-bytes-in atau limit-bytes-out :
+Hampir sama seperti pesan error sebelumnya, traffic user di limit pada Server hotspot.
+Solusi : Minta pengelola hotspot untuk menghilangkan traffic limit nya
+
+no more sessions are allowed for user $(username) :
+Pesan error ini muncul karena banyaknya username tertentu yang bisa login bersamaan sudah habis. Misalnya user tamu bisa digunakan oleh 10 orang, jika orang ke 11 mau login pakai username tamu ini maka akan muncul pesan error ini karena dibatasi pada jumlah shared-users nya.
+Solusi : tunggu hingga user lain dengan username tersebut log out, atau coba login pakai user lain yang shared-users nya masih tersedia.
+
+RADIUS client non-fatal errors:
+
+invalid username or password :
+RADIUS Server menolak username dan password yang dimasukkan karena ada kesalahan pada username dan atau password tersebut. 
+
+Solusi: Coba cek lagi username dan password yang dimasukkan, jika sudah benar tapi tetap tidak bisa login, hubungi pengelola hotspot untuk mengecek log user RADIUS Server.
+
+<error_message_sent_by_radius_server> :
+Konsultasikan dengan dokumentasi server RADIUS untuk informasi lebih lanjut
+
+RADIUS client fatal errors:
+
+RADIUS server is not responding
+Pesan error RADIUS ini muncul karena RADIUS Server tidak dapat diakses oleh user, sehingga user tidak mendapatkan respon dari proses autentikasi yang diminta nya. 
+Solusi: Coba cek apakah RADIUS Server nya benar-benar running dan bisa diakses dari Hotspot Server.
+
+##Metode Pembatasan Bandwidth Hotspot Mikrotik ada 2 :
+
+- Built-in limiter merupakan metode Limit Bandwidth Hotspot Mikrotik yang menggunakan parameter rate-limit di server-profile untuk melimit total traffic dari jaringan hotspot sedangkan jika ingin limit per user bisa menggunakan rate-limit di user-profile. Built-in Limitation dilakukan secara otomatis dan mudah tetapi tidak memungkinkan melakukan implementasi HTB.
+
+- Custom limitation merupakan metode Limit Bandwidth Hotspot Mikrotik yang menggunakan parameter Incoming-packet-mark dan outgoingpacket-mark pada user-profile. Dengan menggunakan Custom Limitation anda bisa melakukan implementasi HTB dan melakukan limitasi berdasarkan kriteria koneksi yang lebih beragam. 
+
+
+
+

@@ -1,0 +1,537 @@
+=========================================================================
+      Command Line Linux
+=========================================================================
+      $ grep “license” readme.txt = mencari kata “license” dalam file readme.txt
+      $ du -h –max-depth=100 = estimate file usage
+      $ du /media/data/ –max-depth=1 -B M | sort –g = melihat penggunaan space pada folder
+      $ du -sh /media/data/ = melihat besaran (MB) folder
+      $ sudo fdisk -l = show partition table
+      $ free = melihat free RAM
+      $ cat /eethtc/fstab = static file system information
+      $ cat /proc/cpuinfo = info cpu
+      $ cat /proc/meminfo = info memory
+      $ cat /proc/partitions = info partition
+      $ cat /etc/rc.d/rc.s = startup
+      $ find / -name “namafile” = search nama file
+      $ find /media/data/ -name “Thumbs.db” -print0 | xargs -0 rm -vr = menghapus hasil pencarian
+      $ find /home/user -size +30M = mencari file dengan ukuran diatas 30M
+      $ alias lihat=’ls -l’ = memberikan alias perintah
+      $ cal 2010 = show calender
+      $ clear = clear the terminal screen
+      $ sudo shutdown -h now = menshutdown pc sekarang
+      $ sudo shutdown -h +2 = menshutdown pc
+      $ init 0 = halt
+      $ init 6 = reboot
+      $ init 2 =
+      $ shutdown -k +2 = 'Server akan dimatikan dalam 2 menit lagi!'
+      $ shutdown 9:00 = pc dimatikan jam 9:00
+      $ top -d 2 = melihat proses shift+?
+      $ who = Show who is logged on
+      $ w = Show who is logged on and what they are doing
+      $ dmesg = print message system
+      $ cfdisk = tool tabel manipulator for linux
+      $ killall sshd = mengkill proses ssh
+      $ pstree = melihat proses secara pohon kebutuhan
+      $ lspci -v = cek hardware via konsole
+      $ lshw -C processor = cek hardware processor
+      $ sudo pmi action sleep = menjalankan fungsi sleep
+      $ sudo pmi action suspend = menjalankan fungsi suspend
+      $ dig 192.168.1.1 = dns lookup utility
+      $ cat /proc/net/arp = cek arp
+      $ sudo gedit /etc/fstab = file konfigurasi mount hardisk
+      $ scp test.log oniichan@192.168.1.12:~ = transfer file via jaringan kedalam home direktori
+      $ iwlist eth1 scanning = scanning access point
+      $ sudo ifconfig eth1 hw ether 0013022e91c7 = mengganti mac address
+      $ sudo apt-get -d source avant-window-navigator-bzr = download paket only, not install
+      $ sudo dpkg-reconfigure xserver-xorg = reconfigure ulang xserver
+      $ sudo /etc/init.d/gdm stop = mematikan service gdm stop
+      $ sudo iwconfig eth1 essid “pptik01″ = mendaftarkan name access point
+      $ sudo dhclient = auto dhcp
+      $ chown oniichan:oniichan /media/data = mengubah owner folder
+      $ sudo adduser nama_user nama_group = menambah user
+      $ usermod -G namagroup namauser = memasukkan user ke group
+      $ cat /etc/group = cek group user
+      $ smbclient -U% -L localhost = cek samba di local
+      $ cat /proc/version = cek version linux header
+      $ ls var/cache/apt/archives/ = data paket apt
+      $ ls /etc/rc2.d/ = list service
+      $ sudo update-rc.d -f rsync remove = meremove service rsync
+      $ sudo update-rc.d rsync defaults = mengadd service menjadi default service
+      $ ls -h = list human readeable
+      $ sudo apt-get install -f = fix dependency broken
+      $ cat /proc/acpi/acer/wireless = melihat penggunaan button
+      $ sudo tail -f /var/log/cups/error_log = melihat error pada service cups
+      $ lshal = melihat hal daemon usb
+      $ sudo hald = mengaktifkan hald daemon
+      $ sudo /etc/init.d/dbus start = service dbus daemon
+      $ nmap -sP 192.168.1.10-30 = checking ip up or not
+      $ watch lsusb = execute a program periodically
+      $ speaker-test 1.0.12 = test sound
+      $ displayconfig-gtk = screen and grafik configurations
+      $ aplay -l = playing file
+      $ lsb_release -a = cek ubuntu version
+      $ lpinfo -v = cek printer
+      $ id = Print user and group information for the specified USERNAME
+      $ ps ax | grep screenlets | awk ‘{print$1}’ | xargs kill -9 = kill spesifik berdasarkan nama proses
+      $ file nama_file = Determine file type of FILEs
+      $ for i in {1..10}; do echo $i; done = urut nomer
+      $ update-manager -d = Check if upgrading to the latest devel release is possible
+      $ cat /etc/passwd | grep 1000 | awk -F: ‘{ print $1 }’ = menampilkan user dengan UID 1000
+      $ find debian/ -iname ‘*’ -print0 | xargs -0 md5sum > md5sum = creating md5sum
+      $ espeak -s 80 “I love you” = text to speech
+      $ apt-cache policy ubuntu-desktop = print policy settings
+      $ sudo ip route replace default nexthop via 192.168.0.1 dev eth0 weight 3 nexthop 192.168.1.1 dev eth1 weight 2 = load balancing
+      $ sudo Xorg -configure :1 = print konfigurasi xorg.conf
+      $ for FILE in cd*.bin ; do bchunk $FILE ${FILE%.*}.cue ${FILE%.*} ; done = mengubah file bin menjadi cue
+      $ rm cd[1-5].@(bin|cue) = menghapus secara spesifik
+      $ ls -l | awk ‘{print $8}’ = print secara list index
+      $ split -b 200MB avatar.avi avatar.avi. = split file into separate file
+      $ cat avatar.avi.* > avatar.avi = merge into 1 file
+      $ wc -ml /etc/apt/sources.list = Print byte, word, and line counts
+      $ history = Command History
+      ————————————————————————–
+      $ cd x atau cd /x == masuk ke direktori x
+      $ cd .. atau cd ../ atau cd/.. == pindah ke direktori satu level di bawah
+      $ x lalu [tab] [tab] == berguna untuk mengetahui perintah apa saja yang tersedia yang berawalan huruf x
+      ————————————————————————–
+      $ adduser == untuk menambahkan user baru
+      $ ls atau dir == untuk melihat isi suatu direktori
+      $ cat == untuk melihat isi dari suatu file text
+      $ sudo mv file X /var/www/html/file Y == untuk memindahkan dan merename file x ke file y
+      $ cp x y == untuk mengkopi file x ke file y
+      $ rm x == untuk menghapus file x
+      $ mkdir x == untuk membuat direktori x
+      $ rmdir x == untuk menghapus direktori x
+      $ rm -r x == untuk menghapus direktori x beserta seluruh isinya
+      $ rm p == untuk menghapus paket tertentu
+      $ df atau df x == untuk mengetahui space kosong dalam device x
+      $ top == untuk mengetahui status memori (tekan q untuk quit)
+      $ man x == untuk mengetahui keterangan manual dari suatu perintah
+      $ less x == untuk melihat isi dari suatu file text
+      $ echo x == untuk mencetak isi dari suatu file x ke screen
+      $ mc == untuk menghidupkan Norton Commander dalam Linux (sangat berguna dan memudahkan bagi newbie)
+      $ mount == untuk menghidupkan suatu device spt cdrom
+      $ halt == untuk shutdown
+      $ reboot atau [ctl + alt + del] == untuk reboot
+      $ sudo -i == hak root
+      $ locate <namafile> == search file from terminal
+      
+	  ========================================================
+	  # ATRIBUTE FILE
+	  ========================================================
+	  $ + == (set)
+	  $ - == (unset)
+	  $ = == (c
+	  
+      ==============================================================
+      $ chmod == untuk mengubah permission suatu file
+      $ chmod 777 == file bisa dibaca atau di tulis siapapun
+      $ chmod 644 == file bisa dibaca siapapun tapi hanya bisa di tulis oleh owner
+      $ chmod 666 == file file bisa dibaca dan di tulis oleh siapapun, tetapi tidak dapat di eksekusi/run 
+      $ chmod 711 == memberikan read, write dan mengeksekusi kepada owner dan hanya menjalankan group dll.
+      $ chmod o+x ~ == 
+      $ chmod o+x ~/public_html ==
+      $ chmod -R o+r ~/public_html ==
+	  --------------------------------------------------------------------
+      Notation			Octal value			Permissions
+	  -|---|---|---		0|000|000|000		Regular files, no permissions 
+	  d|r--|r--|r--		d|400|400|400		Directory, read permission to owner, group, and others
+	  -|rw-|r--|r---|	644|644|644			Regular file, read and write permission to owner and read permission to group or others 
+	  -|rwx|rwx|rwx-|	777|777|777			Regular file, all permissions to everyone 
+	  --------------------------------------------------------------------
+	  
+      =====================================================================
+      $ ls -l x == untuk melihat isi suatu direktori secara rinci
+      $ ls -a == show hidden file
+      $ ls -lh == show size folder
+      $ ls -f == will add the ‘/’ Character at the end each directory.
+      $ ls -r == option display files and directories in reverse order.
+      $ ls -R == option will list very long listing directory trees. See an example of output of the command.
+      $ ls -ltr == will shows latest modification file or directory date as last.
+      $ ls -lS == displays file size in order, will display big in size first.
+      $ ls -i == With -i options list file / directory with inode number.
+      $ ls -l /tmp == With ls -l command list files under directory /tmp. Wherein with -ld parameters displays information of /tmp directory.
+      $ 
+      $ ln -s x y == untuk membuat link dari suatu file x ke file y
+      $ find x -name y -print == untuk menemukan file y, dengan mencari mulai dari direktori x dan tampilkan hasilnya pada layar
+      $ ps == untuk melihat seluruh proses yang sedang berjalan
+      $ kill x == untuk mematikan proses x (x adalah PID di dalam ps)
+      $ [alt] + F1 – F7 == untuk berpindah dari terminal 1 – 7 (ciri khas Linux)
+      $ lilo == untuk membuat boot disk
+      $ startx == untuk menjalankan X-Windows
+      $ [ctl] + [alt] + [backspace] == untuk keluar dari X-Windows jika terjadi trouble
+      $ [ctl] + [alt] + F1 – F6 == untuk pindah dari satu terminal ke terminal lain dalam X-Windows
+      $ xf86Config == untuk mengeset X (primitif) dalam text mode
+      $ Xconfigurator == sama seperti di atas
+      $ sudo sh -c "sync; echo 3 > /proc/sys/vm/drop_caches" == clear cache memory
+      $ sudo mount -o loop <file iso>
+      
+      ===================================================================================
+      apt-get
+      ===================================================================================
+      $ apt-cache stats ==  For more information on these package tools, APT and dpkg.
+      $ apt-cache search 'keyword package' == pencarian paket u/ kata kunci tertentu.
+      $ sudo apt-get install 'package' == download&install package
+      $ sudo apt-get -d install package == Men-download paket saja, menempatkannya di /var/cache/apt/arsip.
+      $ apt-cache show package == menampilkan informasi software dari nama package
+      $ sudo apt-get upgrade == upgrade untuk semua install packages
+      $ sudo apt-get dist-upgrade == update sistem untuk rilis baru
+      $ sudo apt-get autoclean == untuk menghapus paket yg tdk di install lagi.
+      $ sudo apt-get clean == untuk menghapus package di /var/cache/apt/archives
+      $ sudo apt-get --purge remove package == untuk menghapus paket & konfigurasi.
+      $ sudo apt-get -f install == untuk mengecek paket yg rusak.
+      $ apt-config -v == print informasi APT utilities.
+      $ sudo apt-key list == list GPG keys pada APT.
+      $ apt-cache depends == print dependencies pada package.
+      $ find /var/cache/apt/ -name \\*.deb == clean cache
+      $ 
+      =======================================================
+      install file 
+      =======================================================
+      1. ext bin:
+      # cd /dir download
+      # sudo chmod +x filename.bin
+      #./CiscoPacketTracer6.0.1.bin
+      2 ext tar.gz
+      #extrak "tar -xzfvf nama_file.tar.gz"
+      #"cd nama_folder"
+      #./configure"
+      #"make"
+      #"make install"
+      3. ext .deb
+      dependency
+      #cd vlc
+      #-/vlc $ sudo dpkg -i*.deb
+      *dependency
+      # sudo dpkg -i (nama_file) .deb
+      # dpkg --help | more
+      4. ext .sh
+      #chmod +x name_of_file.sh
+      #sh ./name_of_file.sh
+      ===================================================
+      
+      ====================================================
+      remove aplikasi
+      ====================================================
+      # dpkg --remove/-r nama_paket
+      # dpkg --purge/-p nama_paket menampilkan deskripsi paket software
+      # dpkg --print-avail paketsoftware
+      # sudo apt-get purge 'nama_paket-*'
+      # sudo apt-get autoremove 'nama_paket-*'
+      # aptitude remove packagename
+      # aptitude purge packagename
+      ==================================================
+      
+      ====================================================
+      # mengekstrak file:
+      =====================================================
+      $ tar -xjf nama_file.tar.bz2
+      $ tar -xvJf nama_file.tar.bz2
+      $ tar -xzf nama_file.tar.gz
+      $ tar xzvf nama_file.tar.gz 
+      $ tar -Jxvf nama_file.tar.xz
+      $ unzip nama_file.zip
+      $ dpkg --unpack paketsoftware.deb
+      $ tar -xvzf abc.tar.gz -C /opt/folder/ == Extract files to a specific directory or path
+      $ tar -czvf name-of-archive.tar.gz /path/to/directory-or-file
+      Here’s what those switches actually mean:
+      
+          -c: Create an archive.
+          -z: Compress the archive with gzip.
+          -v: Display progress in the terminal while creating the archive, also known as “verbose” mode. The v is always optional in these commands, but it’s helpful.
+          -f: Allows you to specify the filename of the archive.
+      
+      
+      
+      ===================================================
+      # membuat file arsip .tar
+      ===================================================
+      $ tar jcvf namafile.tar.bz2 fileyangakandiarsip
+      	contoh: tar jcvf xrootz.tar.bz2 pointblankoffline.exe
+      $ 
+      ==================================================
+      #clean system
+      ==================================================
+      $ echo "Cleaning Up" &&
+      $ sudo apt-get -f install &&
+      $ sudo apt-get autoremove &&
+      $ sudo apt-get -y autoclean &&
+      $ sudo apt-get -y clean
+      
+      =================================================
+      #wget
+      =================================================
+      $ wget <Option>.. <URL>..
+      $ wget –help
+      $ wget -c <Option>.. <URL>.. == resume
+      $ wget http://cdn.x.indowebster.com/download/60…15054b.mp3 -O a.mp3 = download dan me-rename file
+      $ wget -c -t inf http://www3.indowebster.com/591803763.avi = download dengan opsi continous, try infinite jika gagal
+      $ wget -i download.txt = download dengan opsi membaca url dari file download.txt
+      $ wget –limit-rate=10k = download dengan opsi bandwith hanya 10 kilobytes/s
+      $ wget ftp://ftp.freebsd.org/pub/sys.tar.gz == download file ftp
+      
+      =====================================================
+      #replace repository
+      ===================================================
+      $ sudo gedit /etc/apt/sources.list == set config
+      $ apt-get update == update
+      $ sudo apt-get-u upgrade
+      $ sudo apt-get-u install packagename
+      $ sudo apt-get-u dist-upgrade
+      $ sudo dpkg --configure -a
+      $ sudo apt-get -f install == bila terjadi kesalahan pada proses instalasi
+      ##Adding a PPA#
+      $ sudo add-apt-repository --remove ppa:whatever/ppa == remove repo ppa
+      $ sudo ppa-purge ppa_name == remove repo ppa
+      
+      #network set ip :
+      =========================================================
+      $ sudo gedit /etc/network/interfaces == set config
+      $ sudo /etc/init.d/networking restart == restart service
+      $ sudo nano /etc/resolv.conf == conf nameserver
+      $ sudo route add default gw <ip gateway> == merubah ip gateway
+      $ sudo route -n == cek set gateway
+      $ echo “nameserver 192.168.1.80” >> /etc/resolv.conf == menambahkan nameserver
+      
+      
+      
+      
+      
+      #modem usb command
+      ==============================================
+      $ sudo pppconfig == config
+      $ sudo pppd call (provider) == connect
+      $ poff == disconnect
+      
+      #Troubleshoting
+      ==========================================
+      mengghapus crash report
+      $ cd /var/crash - ls - rm /var/crash/*
+      $ sudo apt-get remove install-info
+      
+      E: Could not get lock /var/lib/apt/lists/lock - open (11: Resource temporarily unavailable)
+      E: Unable to lock directory /var/lib/apt/lists/
+      E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)
+      E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?
+      
+      $ sudo su
+      $ sudo rm /var/lib/apt/lists/lock
+      $ apt-get update
+      
+      E: Sub-process /usr/bin/dpkg returned an error code (1)
+      
+      $ sudo apt-get --purge remove nama_paket
+      $ sudo apt-get autoclean
+      $ sudo apt-get install -f
+      $ sudo dpkg --configure -a
+      
+      #Hash Sum mismatch
+      $ apt-get clean
+      $ rm -rf /var/lib/apt/lists/*
+      $ rm -rf /var/lib/apt/lists/partial/*
+      $ apt-get clean
+      $ apt-get update
+      $ apt-get upgrade
+      
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys < add keys here >
+      
+      Printer trouble - CUPS server error "client-error-not possible"
+      $ sudo apt-get install smbclient
+      
+      ========================================================
+      ###Use Systemctl to Manage Systemd Services and Units###
+      ========================================================
+      $ sudo systemctl start application.service
+      $ sudo systemctl start application
+      $ sudo systemctl stop application.service
+      $ sudo systemctl restart application.service
+      $ sudo systemctl reload application.service
+      $ sudo systemctl reload-or-restart application.service
+      $ sudo systemctl enable application.service
+      $ sudo systemctl disable application.service
+      $ sudo systemctl status application.service
+      $ sudo systemctl is-active application.service
+      $ sudo systemctl is-enabled application.service
+      $ sudo systemctl is-failed application.service
+      $ sudo systemctl list-units
+      	The output has the following columns:
+      
+          UNIT: The systemd unit name
+          LOAD: Whether the unit's configuration has been parsed by systemd. The configuration of loaded units is kept in memory.
+          ACTIVE: A summary state about whether the unit is active. This is usually a fairly basic way to tell if the unit has started successfully or not.
+          SUB: This is a lower-level state that indicates more detailed information about the unit. This often varies by unit type, state, and the actual method in which the unit runs.
+          DESCRIPTION: A short textual description of what the unit is/does.
+      $ systemctl list-units --all
+      $ systemctl list-units --all --state=inactive
+      $ systemctl list-units --type=service
+      $ systemctl list-unit-files
+      $ systemctl cat atd.service
+      $ systemctl list-dependencies sshd.service == Displaying Dependencies
+      $ systemctl show sshd.service == Checking Unit Properties
+      $ systemctl show sshd.service -p Conflicts
+      $ sudo systemctl mask nginx.service == Masking and Unmasking Units
+      $ systemctl list-unit-files
+      
+      Repair GRUB
+      ===========================================
+      $ sudo su   //untuk masuk sebagai root
+      $ fdisk -l   //(fdisk spasi min EL kecil) Untuk melihat detail hardisk
+      $ mkdir /media/root   // untuk membuat foldernya.
+      $ mount /dev/sda6 /media/root   // untuk mengaktifkan direktorinya.
+      $ grub-install --root-directory=/media/root /dev/sda    //Untuk menginstall Grub linuxnya 
+      $ update-grub   //update grubnya
+      
+      
+      Ada tiga cara untuk membangun Kernel Linux.
+      ===============================================
+      $ make oldconfig : Ini adalah cara interaktif di mana kernel mengajukan pertanyaan satu per satu apa yang harus mendukung dan apa yang tidak. Ini adalah memakan waktu proses yang sangat.
+      $ make menuconfig : Ini adalah menu sistem berbasis Command-Line di mana pengguna dapat mengaktifkan dan menonaktifkan pilihan. Hal ini membutuhkan ncurses perpustakaan maka kita Apt yang di atas.
+      $ make qconfig/xconfig/gconfig : Ini adalah menu sistem berbasis grafis di mana pengguna dapat mengaktifkan dan menonaktifkan pilihan. Hal ini membutuhkan QT Library.
+      $ make-kpkg clean
+      $ cat /proc/cpuinfo
+      //CONCURRENCY_LEVEL. CONCURRENCY TINGKAT praktis memiliki aturan untuk menambahkan Numeric 1 ke core dari kernel. Jika Anda memiliki 2 core, ekspor CONCURRENCY_LEVEL = 3. Jika Anda memiliki 4 core, ekspor CONCURRENCY_LEVEL = 5.
+      $ export CONCURRENCY_LEVEL=3
+      $ fakeroot make-kpkg --append-to-version "-tecmintkernel" --revision "1" --initrd kernel_image kernel_headers
+      # Berikut "tecminkernel" 'adalah nama kernel, itu bisa apa saja mulai dari nama, nama host, atau apa pun.
+      
+      ================================================================================
+      Administrasi server
+      ================================================================================
+      $ sudo ifconfig namainterface(eth0) down/up
+      #mematikan atau mengaktifkan interface-interface
+      $ sudo nano /etc/network/interfaces
+      # The primary network interface
+      allow-hotplug ens3
+      # comment out
+      #iface ens3 inet dhcp
+      # add these lines (replace [ens3] name to your own environment)
+      iface ens3 inet static
+      # IP address
+      address 10.0.0.30
+      # network address
+      network 10.0.0.0
+      # subnet mask
+      netmask 255.255.255.0
+      # broadcast address
+      broadcast 10.0.0.255
+      # default gateway
+      gateway 10.0.0.1
+      # name server
+      dns-nameservers 10.0.0.10
+      
+      
+      # edit network interfaces
+      $ sudo nano /etc/resolv.conf
+      # pengeditan alamat nameserver secara manual.
+      $ sudo service networking restart
+      # restart service network
+      $ traceroute
+      # untuk mengetes koneksi link
+      $ netstat = Networking information
+      $ sudo ifup eth0 = Stop a network interface
+      $ sudo ifdown eth0 = Start a network interface up
+      $ arp -ne = cek arp tabel
+      $ mtr http://www.hacker-newbie.org == gabungan ping dan traceroute
+      $ nslookup == cek kinerja DNS server
+      $ chown www-data:www-data -R /var/www/html/ == mengubah owner
+      
+      ================================================================================
+      Wireless command network
+      ================================================================================
+      ./iwconfig
+      # iwconfig [interface] mode master == Menjadikan kartu PCMCIA dalam mode akses poin
+      # iwconfig [interface] mode managed == Menjadikan kartu PCMCIA Anda dalam mode client pada jaringan wifi infrastruktur
+      # iwconfig [interface] mode ad-hoc == Mengeset kartu Anda sebagai anggota di jaringan wifi ad hoc tanpa akses poin
+      # iwconfig [interface] mode monitor == Mengeset kartu Anda dalam mode monitor
+      # iwconfig [interface] essid “SSID_Anda” == Konfigurasikan ESSID jaringan Anda.
+      # iwconfig [interface] key 1111-1111-1111-1111 == Mengeset kunci WEP 128bit
+      # iwconfig [interface] key 11111111 == Mengeset kunci WEP 65 bit
+      # iwconfig [interface] key off == Menonaktifkan kunci WEP
+      # iwconfig [interface] key open == Menset sebagai open mode, tidak diperlukan autentikasi
+      # iwconfig [interface] channel [channel no.] == Menset sebuah channel 1-14
+      # iwconfig [interface] channel auto == Memilih channel otomatis
+      # iwconfig [interface] ap 11:11:11:11:11:11 == Memaksa kartu untuk mendaftar ke alamat AP
+      # iwconfig [interface] rate 11M == Kartu akan menggunakan kecepatan tertentu
+      # iwconfig [interface] rate auto == Memilih kecepatan otomatis
+      ================================================================================
+      Ping command
+      ================================================================================
+      ·         ping -i 8 192.168.1.1 ( menambah interval waktu antara paket )
+      ·         ping localhost atau ping 0
+      ·         ping -c 5 yahoo.com
+      ·         ping -f localhost ( flood the network )
+      ·         ping -c 5 -q 192.168.1.1 ( print ringkasan statistik ping )
+      ·         ping -s 150 localhost ( mengubah ukuran ping – bytes)
+      ·         ping -R 192.168.1.1 ( mencetak rute jaringan )
+      
+      
+      
+      
+      ===============================================================================
+      SAMBA SHARE
+      ===============================================================================
+      #Installing
+      	$ sudo apt-get install samba samba-common python-glade2 
+      #Creating Anonymous share
+      	$ sudo mkdir -p /shares/anonymous
+      #Change the ownership to nobody so that everyone can access and store files in that folder.
+      	$ sudo chown nobody:nogroup /shares/anonymous/
+      #Take a backup before editing that file
+      	$ sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.org
+      #now add the below code at the end of the file to enable share.
+      [Anonymous]
+             comment = Anonymous share access
+             path = /shares/anonymous
+             browsable = yes
+             writable = yes
+             guest ok = yes
+             read only = no
+             force user = nobody
+             force group = nogroup
+      #Now restart smbd service
+      	$ sudo service smbd restart
+      
+      ##Creating secured share
+      #Create folder share
+      	$ sudo mkdir -p /shares/project1
+      #Create a new group smbproj1,so that Users added to this group can access project1 share.
+      	$ sudo addgroup smbproj1
+      #Modify ownership and permission for the folder.
+      	$ sudo chown root:smbproj1 /shares/project1/
+      	$ sudo chmod 770 /shares/project1/
+      #Now define values in the configuration file
+      	$ sudo vim /etc/samba/smb.conf
+      
+      [Project1]
+               comment = Project1 Share
+               path = /shares/project1
+               valid users = @smbproj1
+               guest ok = no
+               writable = yes
+               browsable = yes
+      
+      #Now restart smbd service
+      	$ sudo service smbd restart
+      
+      
+===============================================================
+virtualbox
+=============
+$ sudo pacman -S virtualbox
+$ sudo modprobe vboxdrv
+$ sudo nano /etc/modules-load.d/virtualbox.conf
+> ‘vboxdrv’
+$ sudo lsmod | grep vboxdrv
+===============================
+libvirt
+========
+$ sudo virsh net-list --all
+$ sudo virsh net-start default
+
+
+
+
+
+
+
+

@@ -1,0 +1,161 @@
+## List Docker CLI commands
+      docker
+      docker container --help
+      
+      ## Display Docker version and info
+      docker --version
+      docker version
+      docker info
+      
+      ## Activ docker swap
+      nano /etc/default/grub
+      GRUB_CMDLINE_LINUX="cgroup_enable=memoryswapaccount=1"
+      update-grub 
+
+      ## Execute Docker image
+      docker run hello-world
+      docker run -it id_container bash
+	  $ sudo docker run -i -t ubuntu:14.04 /bin/bash
+	  
+      ## List Docker images
+      docker image ls
+      
+      ## List Docker containers (running, all, all in quiet mode)
+      docker container ls
+      docker container ls --all
+      docker container ls -aq
+      
+      Child commands
+      Command 	Description
+      docker attach =	Attach local standard input, output, and error streams to a running container
+      docker build =	Build an image from a Dockerfile
+      docker checkpoint =	Manage checkpoints
+      docker commit =	Create a new image from a container’s changes
+      docker config =	Manage Docker configs
+      docker container =	Manage containers
+      docker cp =	Copy files/folders between a container and the local filesystem
+      docker create =	Create a new container
+      docker deploy =	Deploy a new stack or update an existing stack
+      docker diff =	Inspect changes to files or directories on a container’s filesystem
+      docker events =	Get real time events from the server
+      docker exec =	Run a command in a running container
+      docker export =	Export a container’s filesystem as a tar archive
+      docker history =	Show the history of an image
+      docker image =	Manage images
+      docker images =	List images
+      docker import =	Import the contents from a tarball to create a filesystem image
+      docker info =	Display system-wide information
+      docker inspect =	Return low-level information on Docker objects
+      docker kill =	Kill one or more running containers
+      docker load =	Load an image from a tar archive or STDIN
+      docker login =	Log in to a Docker registry
+      docker logout =	Log out from a Docker registry
+      docker logs =	Fetch the logs of a container
+      docker manifest =	Manage Docker image manifests and manifest lists
+      docker network =	Manage networks
+      docker node =	Manage Swarm nodes
+      docker pause =	Pause all processes within one or more containers
+      docker plugin =	Manage plugins
+      docker port =	List port mappings or a specific mapping for the container
+      docker ps =	List containers
+      docker pull =	Pull an image or a repository from a registry
+      docker push =	Push an image or a repository to a registry
+      docker rename =	Rename a container
+      docker restart =	Restart one or more containers
+      docker rm =	Remove one or more containers
+      docker rmi =	Remove one or more images
+      docker run =	Run a command in a new container
+      docker save =	Save one or more images to a tar archive (streamed to STDOUT by default)
+      docker search =	Search the Docker Hub for images
+      docker secret =	Manage Docker secrets
+      docker service =	Manage services
+      docker stack =	Manage Docker stacks
+      docker start =	Start one or more stopped containers
+      docker stats =	Display a live stream of container(s) resource usage statistics
+      docker stop =	Stop one or more running containers
+      docker swarm =	Manage Swarm
+      docker system =	Manage Docker
+      docker tag =	Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+      docker top =	Display the running processes of a container
+      docker trust =	Manage trust on Docker images
+      docker unpause =	Unpause all processes within one or more containers
+      docker update =	Update configuration of one or more containers
+      docker version =	Show the Docker version information
+      docker volume =	Manage volumes
+      docker wait =	Block until one or more containers stop, then print their exit codes
+
+======================================================================================================
+Installing Docker & kubernetes
+======================================================================================================
+sudo apt-get autoremove -y docker-engine \
+&& sudo apt-get purge docker-engine -y \
+&& sudo rm -rf /etc/docker/ \
+&& sudo rm -f /etc/systemd/system/multi-user.target.wants/docker.service \
+&& sudo rm -rf /var/lib/docker \
+&&  sudo systemctl daemon-reload
+
+arch
+$ pacman -S qemu virt-manager virt-viewer dnsmasq iptables vde2 bridge-utils openbsd-netcat
+$ wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 -O  /usr/local/bin/minikube
+$ yaourt -Sy minikube-bin
+$ curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+
+#---------------------------------------------------------------
+#PORTAINER
+#---------------------------------------------------------------
+$ mkdir ~/portainer  ----> Create a directory on the host system to persist container data
+$ docker pull portainer/portainer
+$ docker tag portainer/portainer portainer
+$ export CONT_NAME="portainer"
+$ docker run -d -p 9000:9000 \
+--restart always \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v ~/portainer:/data \
+--name ${CONT_NAME} \
+portainer
+
+#Windows portainer
+$ docker run -d -p 9000:9000 -v //var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+
+
+
+# ------------------------------------
+# Docker alias and function
+# ------------------------------------
+
+# Get latest container ID
+alias dl="docker ps -l -q"
+# Get container process
+alias dps="docker ps"
+# Get process included stop container
+alias dpa="docker ps -a"
+# Get images
+alias di="docker images"
+# Get container IP
+alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+# Run deamonized container, e.g., $dkd base /bin/echo hello
+alias dkd="docker run -d -P"
+# Run interactive container, e.g., $dki base /bin/bash
+alias dki="docker run -i -t -P"
+# Execute interactive container, e.g., $dex base /bin/bash
+alias dex="docker exec -i -t"
+# Stop all containers
+dstop() { docker stop $(docker ps -a -q); }
+# Remove all containers
+drm() { docker rm $(docker ps -a -q); }
+# Stop and Remove all containers
+alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+# Remove all images
+dri() { docker rmi $(docker images -q); }
+# Dockerfile build, e.g., $dbu tcnksm/test 
+dbu() { docker build -t=$1 .; }
+# Show all alias related docker
+dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
+# Bash into running container
+dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
+
+
+
+
+

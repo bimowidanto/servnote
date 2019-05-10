@@ -1,0 +1,72 @@
+============================================================================
+============================DESKTOP ART=====================================
+============================================================================
+#############NCMPCPP####################
+$ sudo apt-get install mpd mpc ncmpcpp
+$ mkdir ~/.mpd
+$ mkdir mpd.fifo /tmp
+$ cd .mpd
+$ touch mpd.log mpd.pid mpd.db mpdstate 
+$ gedit mpd.conf
+=====MPDCONFIG=====
+music_directory "/home/user/Music"
+playlist_directory "/home/user/Music"
+db_file "/home/user/.mpd/mpd.db"
+log_file "/home/user/.mpd/mpd.log"
+pid_file "/home/user/.mpd/mpd.pid"
+state_file "/home/user/.mpd/mpdstate"
+audio_output {
+        type "pulse"
+        name "pulse audio"
+}
+audio_output {
+    type                    "fifo"
+    name                    "my_fifo"
+    path                    "/tmp/mpd.fifo"
+    format                  "44100:16:2"
+}
+
+
+bind_to_address "127.0.0.1"
+port "6601"
+==================
+$ mkdir ~/.ncmpcpp
+$ nano ~/.ncmpcpp/config
+=======NCMPCPPCONFIG========
+mpd_host = "127.0.0.1"
+mpd_port = "6601"
+mpd_music_dir = "/home/user/Music"
+===========================================
+$ killall mpd
+$ mpd
+$ ncmpcpp
+=============================================================================
+
+=============================================================================
+===========================XMONAD ** DZEN====================================
+=============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

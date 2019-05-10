@@ -1,0 +1,455 @@
+###########################################################################
+      ==========================Command MT+++++++++++++++++++++++++++++++
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      //Interface
+      $interface print
+      $interface set 0 name=ether1
+      $interface disable 3 | 3,4 = 2 ether disable
+      $interface enable 3 | ~~
+      *set master port
+      $interface ethernet set 2 master-port=ether2
+      //IP address
+      $ip address add address=0.0.0.0/0 interface=ether1
+      *remove IP
+      $ip address remove 0 <-- Flags
+      //Default gateway
+      $ip route add dst-address=0.0.0.0/0 gateway=0.0.0.0/0
+      *DNS server
+      $ip dns set servers=0.0.0.0 allow-remote-request=yes
+      *Masquerade
+      $ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+      //Username
+      $user set 0 password=123456
+      //Identity
+      $system indentity set name=gateway
+      //NTP client
+      $system ntp client set primary-ntp=203.160.128.3 enable=yes
+      *autodetect
+      $system ntp set time-zone-autodetect=yes
+      //Monitoring Tools
+      ##ARP(Address Resolution protocol
+      $ip arp print
+      *static ARP
+      $ip arp add address=0.0.0.0 mac-address=00:00:00:00:00:00 interface=ether1
+      ##IP scan
+      $tool ip-scan interface=ether2 address-range=0.0.0.0/0
+      ##MAC Scan
+      $tool mac-scan ether1
+      ##Torch --> bandwidth viewer realtime
+      $tool torch interface=ether1 src-address=0.0.0.0/0
+      //Maintenance
+      $system shutdown
+      $system reboot
+      $system reset-configuration
+      $system reset-configuration no-defaults=yes <-- factory setting
+      //Backup
+      $system backup save
+      $system backup save name=name-config password=123456 <-- save format name & password
+      //Restore
+      $system backup load name=name-config.backup password=123456
+      
+      ++FIREWALL++
+      IP packet:
+      Note:
+      -source address
+      -destination address
+      -source port
+      -destination port
+      ##protocol
+      -TCP
+      -UDP
+      -ICMP
+      ##masquerade IP tertentu
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1 out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 s/d 10.254
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 s/d 10.5
+      *remove ip firewall
+      $ip firewall nat remove <nomor index>
+      ##masquerade IP tertentu
+      ~List port
+      
+      *tambahkan opsi protocol $ destination port
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 protocol=tcp dst-port=80 out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 <HTTP>
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 protocol=tcp dst-port=443 out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 <HTTPS>
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 protocol=tcp dst-port=5050 out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 <HTTPS>
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 protocol=tcp dst-port=80,443,5050 out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 <clean command>
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 protocol=icmp out-interface=ether1 action=masquerade <-- permission range IP 10.10.10.1 <ICMP>
+      ##Masquerade dengan fungsi waktu
+      $ip firewall nat add chain=srcnat src-address=10.10.10.1-10.10.10.5 protocol=tcp dst-port=80,443,5050 time=08:00-16:00,mon,tue,wed,thu,fri,sat,sun out-interface=ether1 action=masquerade
+      
+      ##Filter
+      Chain:
+      input,output & forward
+      ##Port default mikrotik:
+      -22<ssh>,23<telnet>,20-21<ftp>,80<webfig>,8291<winbox>
+      *drop port default mikrotik
+      $ip firewall filter add chain-input in-interface=ether1 protocol=tcp dst-port=20,21,22,23,80,8291 action=drop
+      *drop ping from internet
+      $ip firewall filter add chain-input in-interface=ether1 protocol=icmp connection-state=established action=accept
+      $ip firewall filter add chain-input in-interface=ether1 protocol=icmp action=drop
+      *IP tertentu akses ke mikrotik
+      $ip firewall filter add chain-input in-interface=ether1 protocol=tcp dst-port=8291 src-address=0.0.0.0 action=accept
+      $ip firewall filter move 3 0
+      ********************************************
+      $ip firewall filter add chain=input in-interface=ether2 src-address=0.0.0.0 action=accept
+      $ip firewall filter add chain=input in-interface=ether2 protocol=icmp connection-state=established action=accept
+      $ip firewall filter add chain=input in-interface=ether2 protocol=icmp action=drop
+      $ip firewall filter add chain=input in-interface=ether2 protocol=tcp dst-port=20,22,23,80,8291 action=drop
+      ********************************************
+      ##Chain Forward
+      *drop inet ip tertentu
+      $ip firewall nat print
+      $ip firewall filter add chain=forward src-address=10.10.10.5-10.10.10.10 in-interface=ether2 action=accept
+      $ip firewall filter add chain=forward src-address=10.10.10.5/24 in-interface=ether2 action=drop
+      *********************************************
+      ##Chain forward & content
+      *drop situs & content
+      $ip firewall filter add chain=forward src-address=10.10.10.5/24 content=www.playboy.com action=drop
+      $ip firewall filter add chain=forward src-address=10.10.10.5/24 content=.mp3 action=drop
+      *********************************************
+      ##Action=reject
+      $ip firewall filter add chain=forward src-address=10.10.10.5-10.10.10.10 action=accept
+      $ip firewall filter add chain=forward src-address=10.10.10.0/24 action=reject-with=icmp-host-unreachable
+      *********************************************
+      ##Address list
+      *mendeklarasikan ip address jaringan
+      $ip firewall address-list add address=10.10.10.0/24 list="jaringan lokal"
+      $ip firewall address-list add address=10.10.10.4 list="pc admin"
+      *firewall filter address list
+      $ip firewall filter add chain=input in-interface=ether2 protocol=icmp action=add-src-to-address-list address-list="ping ilegal"
+      $ip firewall filter add chain=input in-interface=ether2 protocol=tcp dst-port=22,23,8291 action=add-src-to-address-list="akses ilegal"
+      +++++++++++++++++++++++++++++++++++++++++++++
+      
+      ##WEB PROXY MT
+      $ip proxy set enable=yes port=8080 cache-administrator=admin@mynetwok.com max-cache-size=unlimited max-cache-object-size=4096 always-from-cache=yes cache-on-disk=yes
+      *access control
+      $ip proxy access add src-address=10.10.10.0/24 action=allow 
+      $ip proxy access add src-address=0.0.0.0/0 action=deny
+      $ip proxy print detail
+      ++++++++++++++++++++++++++++++++++++++++++++
+      ##Traffic filtering
+      *drop by extensi 
+      $ip proxy access add src-address=10.10.10.0/24 path=:.iso action=deny
+      *drop by URL
+      $ip proxy access add src-address=10.10.10.0/24 dst-host=www.playboy.com action=deny
+      *drop by content
+      $ip proxy access add src-address=10.10.10.0/24 dst-host=*porn* action=deny
+      *drop to web
+      $ip proxy access add src-address=10.10.10.0/24 dst-host=www.playboy.com redirect-to=www.google.com action=deny
+      ++++++++++++++++++++++++++++++++++++++++++++
+      ##Cache control
+      $ip proxy cache-contents print
+      *drop caching extension file
+      $ip proxy cache add src-address=10.10.10.0/24 path=:.exe action=deny
+      $ip proxy cache print
+      *drop caching content
+      $ip proxy cache add src-address=10.10.10.0/24 dst-host=www.playboy.com action=deny
+      *clear cache
+      $ip proxy clear-cache
+      ++++++++++++++++++++++++++++++++++
+      ##Transparent proxy
+      $ip firewall nat add chain=dstnat protocol=tcp src-address=10.10.10.0/24 dst-port=80 action=redirect to-ports=8080
+      ##External proxy config
+      *Note:
+      IP
+      -MT:10.10.10.1/24
+      -ExternalProxy:10.10.30.2/24
+      $ip address add address=10.10.30.1/24 interface=ether3
+      $ip firewall nat add chain=srcnat src-address=10.10.10.2 out-interface=ether1 action=masquerade
+      $ip firewall nat add chain=dstnat src-address=10.10.10.0/24 protocol=tcp dst-port=80 action=dst-nat to-addresses=10.10.30.2 to-ports=8080
+      ++++++++++++++++++++++++++++++++++++++++
+      ##DHCP server
+      Note:
+      -Network address
+      -Gateway
+      -IP address pool
+      -DNS server
+      -Lease time
+      *Setup by wizard
+      $ip dhcp-server setup
+      $ip dhcp-server detail
+      $ip dhcp-server network detail
+      ++++++++++++++++++++++++++++++++++++
+      ##Static Mapping
+      $ip dhcp-server lease add address=10.10.10.2 mac-address=00:1E:33:65:D8:AF
+      $ip dhcp-server lease print detail
+      *DHCP server secure
+      $ip dhcp-server set 0 add-arp=yes
+      $interface ethernet set 1 arp=reply-only
+      *make static dhcp server
+      $ip dhcp-server lease make-static numbers=0
+      $ip dhcp-server> add address-pool=static-only interface=ether2
+      ++++++++++++++++++++++++++++++++++++
+      ##DHCP Client
+      $ip dhcp-client add interface=ether1 disabled=no 
+      $ip address print
+      $ip route print
+      ++++++++++++++++++++++++++++++++++++
+      ##DHCP Reservation ip
+      $ip dhcp-server lease make-static numbers=0 <--#flag number ip
+      
+      ====================================
+      Note:
+      -Committed Information Rate(CIR)
+      =alokasi bandwidth terendah pada traffic full
+      -Maximum Information Rate(MIR)
+      =alokasi bandwidth maksimum pada traffic full
+      ##QOS simple bandwidth management
+      #Skenario 1
+      $queue simple add name=User-1 target=10.10.10.2 max-limit=256k/256k
+      $queue simple add name=User-2 target=10.10.10.3 max-limit=256k/256k
+      $queue simple print
+      #Skenario 2
+      ~create user ether 
+      $queue simple add name=Limit-All target=10.10.10.0/24 max-limit=1M/1M 
+      ~create config CIR & MIR
+      $queue simple add name=User-1 target=10.10.10.2 max-limit=1M/1M limit-at=256k/256k parent=Limit-All
+      $queue simple add name=User-2 target=10.10.10.2 max-limit=1M/1M limit-at=256k/256k parent=Limit-All
+      #opsi waktu
+      $queue simple add name=User-1 target=10.10.10.2 max-limit=1M/1M limit-at=256k/256k parent=Limit-All time=08:00:00-16:00:00,mon,tue,wed,thu,fri
+      $queue simple add name=User-2 target=10.10.10.2 max-limit=1M/1M limit-at=256k/256k parent=Limit-All time=08:00:00-16:00:00,mon,tue,wed,thu,fri
+      #priority
+      $queue simple add name=User-1 target=10.10.10.2 max-limit=1M/1M limit-at=256k/256k parent=Limit-All priority=1/1
+      $queue simple add name=User-2 target=10.10.10.2 max-limit=1M/1M limit-at=256k/256k parent=Limit-All priority=2/2
+      #limit berdasarkan ekstensi file | connection-mark="paket terlimit-conn"
+      $ip firewall mangle add chain=prerouting src-address=10.10.10.0/24 protocol=tcp dst-port=80 content=.rar action=mark-connection new-connection-mark="paket terlimit-conn"
+      $ip firewall mangle add chain=prerouting src-address=10.10.10.0/24 protocol=tcp dst-port=80 content=.exe action=mark-connection new-connection-mark="paket terlimit-conn"
+      #buat mark packet bredasarkan mark-connection
+      $ip firewall mangle add chain=prerouting connection-mark="paket terlimit-conn" action=mark-packet new-packet-mark="paket terlimit"
+      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PROPERTIES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      Route flags
+      Property(Flag)	                                      Description
+      $ disabled (X) ==	Configuration item is disabled. It does not have any effect on other routes and is not used by forwarding or routing protocols in any way.
+      $ active (A) ==	Route is used for packet forwarding. See route selection.
+      $ dynamic (D) ==	Configuration item created by software, not by management interface. It is not exported, and cannot be directly modified.
+      $ connect (C) ==	connected route.
+      $ static (S) ==	static route.
+      $ rip (r) ==	RIP route.
+      $ bgp (b) ==	BGP route.
+      $ ospf (o) ==	OSPF route.
+      $ mme (m) ==	MME route.
+      $ blackhole (B) ==	Silently discard packet forwarded by this route.
+      $ unreachable (U) ==	Discard packet forwarded by this route. Notify sender with ICMP host unreachable (type 3 code 1) message.
+      prohibit (P)	Discard packet forwarded by this route. Notify sender with ICMP communication administratively prohibited (type 3 code 13) message.
+      $ DAo (Dinamic, Active, Ospf).
+      $ DAC means Dynamic, Active, Connected
+      $ DAr means Dynamic, Active, rip
+      $ X - disabled, 
+      $ A - active,
+      $ D - dynamic,
+      $ C - connect, 
+      $ S - static, 
+      $ r - rip,
+      $ b - bgp, 
+      $ o - ospf, 
+      $ m - mme, 
+      $ B - blackhole, 
+      $ U - unreachable, 
+      $ P - prohibit
+      $ S - static,
+      $ H - DHCP,  
+      $ A - authorized, 
+      $ P - bypassed
+      $ R - radius
+      $ B - blocked
+      $ RS - running slave 
+      $ PS - bypassed static
+      $ HA - DHCP authorized
+      
+      
+      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~WIRELESS NETWORK~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      Case :
+      -FUP use 1GB -> bandwith drop 128k
+      tahap :
+      1. bikin 2 profile user hotspot :
+      ---> profile pertama :
+      ------> nama : belum FUP
+      ------> rate limit : 1m/1m
+      ------> script on login : 
+      ==================
+      /system scheduler add name="reset-FUP-$user" start-time=00:00:01 interval=24:00:00 on-even="/ip hotspot user set $user profile=\\"belum FUP" comment=\\"$user belum FUP" ; /ip hotspot user reset-counters $user ; /ip hotspot user set $user limit-bytes-total=1G"
+      ==================
+      
+      ------> script on logoff :
+      ==================
+      :if ([/ip hotspot user get $user limit-bytes-total] > "1g") do={/ip hotspot user set $user profile="sudah FUP" comment="user $user terkena fup hari ini" ; /ip hotspot user set $user limit-bytes-total=0}
+      ==================
+      
+      ---> profile kedua :
+      ------> nama : sudah FUP
+      ------> rate limit : 128k/128k
+      
+      2. bikin user hotspot :
+      ---> nama : userFUP
+      ---> pass : ****FUP
+      ---> profile : belum FUP
+      ---> limit bytes total : 1G
+      ====================================================================
+      
+      
+      
+      
+      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ~~~~~~~~~~~~~~~~~~~~~~~~Static routing~~~MTCNA~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      Topology 1:
+      
+      PC1/192.168.1.0/24 --> ether2 R1 -- ether1-10.10.10.0/24 -- ether1 -- R2 ether2 --> 192.168.2.0/24/PC2
+      
+      ##addroute R1
+      $ip route add dst-address=192.168.2.0/24 gateway=10.10.10.2
+      ##addroute R2
+      $ip route add dst-address=192.168.1.0/24 gateway=10.10.10.1
+      $ip route print
+      -------------------------------------------------------------
+      Topology 2:
+      
+      Modem 
+      Dns server: 60.1.1.1,70.1.1.1
+      modem ether1 60.1.1.1 <-- ether1 60.1.1.2/30 gateway 10.10.10.6/29 ether2 --> SW1 10.10.10.0/29 <-- 10.10.10.1/24 ether1 R1 ether2 --> 192.168.1.0/24
+      																			  SW1 10.10.10.0/29 <-- 10.10.10.2/24 ether1 R2 ether2 --> 192.168.2.0/24
+      
+      ##add route gateway
+      $ip add route dst-address=192.168.1.0/24 gateway=10.10.10.1   
+      $ip add route dst-address=192.168.2.0/24 gateway=10.10.10.2
+      ##add route R1 & R2
+      $ip add route dst-address=192.168.2.0/24 gateway=10.10.10.2
+      $ip add route dst-address=192.168.1.0/24 gateway=10.10.10.1
+      ## add route inet & dns server
+      $ip add route dst-address=0.0.0.0/0 gateway=60.1.1.1
+      $ip add route dst-address=0.0.0.0/0 gateway=10.10.10.6 
+      $ip add route dst-address=0.0.0.0/0 gateway=10.10.10.6
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Load Balance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      Topology lanjutan:
+      
+      Modem 
+      Dns server: 60.1.1.1,70.1.1.1
+      modem ether1 60.1.1.1 <-- ether1 60.1.1.2/30 gateway 10.10.10.6/29 ether2 --> SW1 10.10.10.0/29 <-- 10.10.10.1/24 ether1 R1 ether2 --> 192.168.1.0/24
+      																														 	ether3 --> 10.1.1.2/24
+      																			  SW1 10.10.10.0/29 <-- 10.10.10.2/24 ether1 R2 ether2 --> 192.168.2.0/24
+      																			  												ether3 --> 10.10.10.2/24
+      ##loadbalancing R1 to R2
+      $ip route add dst-address=192.168.2.0/24 gateway=10.1.1.2,10.10.10.2
+      $ip route add dst-address=192.168.1.0/24 gateway=10.1.1.1,10.10.10.1
+      $ip route print
+      
+      #####################################################################################
+      +++++++++++++++++++++++++++++++++++ BRIDGING ++++++++++++++++++++++++++++++++++++++++
+      =====================================================================================
+      {LAYER 2} bridge adalah teknik menggabungkan beberapa interface jaringan dari router, sehingga
+      interface2 tersebut akan ada dalam satu segmen jaringan.
+      <skenario> konsep bridging
+      ##Topology 1:
+      PC1/192.168.1.1/24 --> ether2 R1 -- ether1 -- 192.168.1.0/24 -- ether1 -- R2 ether2 --> 192.168.1.2/24/PC2
+                                <------------>                           <------------>
+                                    bridge                                   bridge
+      $ interface brige add name=bride1
+      $ interface bridge port add interface=ether1 bridge=bridge1
+      $ interface bridge port add interface=ether2 bridge=bridge1
+
+      ####################################################################################
+      ++++++++++++++++++++++FIREWALL++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      ####################################################################################
+      /ip firewall filter
+      add action=drop chain=virus comment="Blaster Worm" dst-port=135-139 protocol=\\tcp
+      add action=drop chain=virus comment="Messenger Worm" dst-port=135-139 \\protocol=udp
+      add action=drop chain=virus comment="Blaster Worm" dst-port=445 protocol=tcp
+      add action=drop chain=virus comment="Blaster Worm" dst-port=445 protocol=udp
+      add action=drop chain=virus comment=________ dst-port=593 protocol=tcp
+      add action=drop chain=virus comment=________ dst-port=1024-1030 protocol=tcp
+      add action=drop chain=virus comment="Drop MyDoom" dst-port=1080 protocol=tcp
+      add action=drop chain=virus comment=________ dst-port=1214 protocol=tcp
+      add action=drop chain=virus comment="ndm requester" dst-port=1363 protocol=\\tcp
+      add action=drop chain=virus comment="ndm server" dst-port=1364 protocol=tcp
+      add action=drop chain=virus comment="screen cast" dst-port=1368 protocol=tcp
+      add action=drop chain=virus comment=hromgrafx dst-port=1373 protocol=tcp
+      add action=drop chain=virus comment=cichlid dst-port=1377 protocol=tcp
+      add action=drop chain=virus comment="Bagle Virus" dst-port=2745 protocol=tcp
+      add action=drop chain=virus comment=Dumaru.Y dst-port=2283 protocol=tcp
+      add action=drop chain=virus comment=Beagle dst-port=2535 protocol=tcp
+      add action=drop chain=virus comment=Beagle.C-K dst-port=2745 protocol=tcp
+      add action=drop chain=virus comment=MyDoom dst-port=3127-3128 protocol=tcp
+      add action=drop chain=virus comment="Backdoor OptixPro" dst-port=3410 \\protocol=tcp
+      add action=drop chain=virus comment=Worm dst-port=4444 protocol=tcp
+      add action=drop chain=virus comment=Worm dst-port=4444 protocol=udp
+      add action=drop chain=virus comment="Drop Sasser" dst-port=5554 protocol=tcp
+      add action=drop chain=virus comment="Drop Beagle.B" dst-port=8866 protocol=\\tcp
+      add action=drop chain=virus comment="Drop Dabber.A-B" dst-port=9898 protocol=\\tcp
+      add action=drop chain=virus comment="Drop Dumaru.Y" dst-port=10000 protocol=\\tcp
+      add action=drop chain=virus comment="Drop MyDoom.B" dst-port=10080 protocol=\\tcp
+      add action=drop chain=virus comment="Drop NetBus" dst-port=12345 protocol=tcp
+      add action=drop chain=virus comment="Drop Kuang2" dst-port=17300 protocol=tcp
+      add action=drop chain=virus comment="Drop SubSeven" dst-port=27374 protocol=\\tcp
+      add action=drop chain=virus comment="Drop PhatBot,Agobot, Gaobot" dst-port=\\65506 protocol=tcp
+      add action=drop chain=virus comment=Trinoo dst-port=12667 protocol=udp
+      add action=drop chain=virus comment=Trinoo dst-port=27665 protocol=udp
+      add action=drop chain=virus comment=Trinoo dst-port=31335 protocol=udp
+      add action=drop chain=virus comment=Trinoo dst-port=27444 protocol=udp
+      add action=drop chain=virus comment=Trinoo dst-port=34555 protocol=udp
+      add action=drop chain=virus comment=Trinoo dst-port=35555 protocol=udp
+      add action=drop chain=virus comment=Trinoo dst-port=27444 protocol=tcp
+      add action=drop chain=virus comment=Trinoo dst-port=27665 protocol=tcp
+      add action=drop chain=virus comment=Trinoo dst-port=31335 protocol=tcp
+      add action=drop chain=virus comment=Trinoo dst-port=31846 protocol=tcp
+      add action=drop chain=virus comment=Trinoo dst-port=34555 protocol=tcp
+      add action=drop chain=virus comment=Trinoo dst-port=35555 protocol=tcp
+      add action=drop chain=forward comment=";;Block W32.Kido - Conficker" \\
+      protocol=udp src-port=135-139,445
+      add action=drop chain=forward dst-port=135-139,445 protocol=udp
+      add action=drop chain=forward protocol=tcp src-port=135-139,445,593
+      add action=drop chain=forward dst-port=135-139,445,593 protocol=tcp
+      add action=drop chain=input comment="drop FTP Brute Forcers" dst-port=21 \\
+      protocol=tcp src-address-list=FTP_BlackList
+      add action=drop chain=input dst-port=21 protocol=tcp src-address-list=\\
+      FTP_BlackList
+      add chain=output content="530 Login incorrect" dst-limit=\\
+      1/1m,9,dst-address/1m protocol=tcp
+      add action=add-dst-to-address-list address-list=FTP_BlackList \\
+      address-list-timeout=1d chain=output content="530 Login incorrect" \\
+      protocol=tcp
+      add action=drop chain=input comment="drop SSH&TELNET Brute Forcers" dst-port=\\
+      22-23 protocol=tcp src-address-list=IP_BlackList
+      add action=add-src-to-address-list address-list=IP_BlackList \\
+      address-list-timeout=1d chain=input connection-state=new dst-port=22-23 \\
+      protocol=tcp src-address-list=SSH_BlackList_3
+      add action=add-src-to-address-list address-list=SSH_BlackList_3 \\
+      address-list-timeout=1m chain=input connection-state=new dst-port=22-23 \\
+      protocol=tcp src-address-list=SSH_BlackList_2
+      add action=add-src-to-address-list address-list=SSH_BlackList_2 \\
+      address-list-timeout=1m chain=input connection-state=new dst-port=22-23 \\
+      protocol=tcp src-address-list=SSH_BlackList_1
+      add action=add-src-to-address-list address-list=SSH_BlackList_1 \\
+          address-list-timeout=1m chain=input connection-state=new dst-port=22-23 \\
+          protocol=tcp
+      add action=drop chain=input comment="drop port scanners" src-address-list=\\
+          port_scanners
+      add action=add-src-to-address-list address-list=port_scanners \\
+          address-list-timeout=2w chain=input protocol=tcp tcp-flags=\\
+          fin,!syn,!rst,!psh,!ack,!urg
+      add action=add-src-to-address-list address-list=port_scanners \\
+          address-list-timeout=2w chain=input protocol=tcp tcp-flags=fin,syn
+      add action=add-src-to-address-list address-list=port_scanners \\
+          address-list-timeout=2w chain=input protocol=tcp tcp-flags=syn,rst
+      add action=add-src-to-address-list address-list=port_scanners \\
+          address-list-timeout=2w chain=input protocol=tcp tcp-flags=\\
+          fin,psh,urg,!syn,!rst,!ack
+      add action=add-src-to-address-list address-list=port_scanners \\
+          address-list-timeout=2w chain=input protocol=tcp tcp-flags=\\
+          fin,syn,rst,psh,ack,urg
+      add action=add-src-to-address-list address-list=port_scanners \\
+          address-list-timeout=2w chain=input protocol=tcp tcp-flags=\\
+          !fin,!syn,!rst,!psh,!ack,!urg
+      add action=drop chain=input comment="Ransome Wanacry" dst-port=139,445,3389 \\
+          protocol=tcp
+      add action=drop chain=input dst-port=135-139,445,3389,20004,7533,5678 \\
+          protocol=udp
+      add action=drop chain=forward dst-port=135-139,445,3389 protocol=udp
+      add action=drop chain=forward dst-port=139,445,3389 protocol=tcp
