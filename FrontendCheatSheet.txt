@@ -185,6 +185,12 @@ Commit all local changes in tracked files
 $ git commit -a
 Commit previously staged changes
 $ git commit
+Commit with message:
+$ git commit -m 'message here'
+Commit skipping the staging area and adding message:
+$ git commit -am 'message here'
+Commit to some previous date:
+$ git commit --date="`date --date='n day ago'`" -am "<Commit Message Here>"
 Change the last commit
 Don‘t amend published commits!
 $ git commit --amend
