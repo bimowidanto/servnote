@@ -157,11 +157,19 @@ dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
 =====================================================
 Github Cheatsheet :
 =====================================================
+##Git Schema
+                  -> init                start          
+git flow   -> feature   -> finish     -> name
+                  -> release        publish
+                  -> hotflix         pull
+
 Create
 Clone an existing repository
 $ git clone ssh://user@domain.com/repo.git
 Create a new local repository
 $ git init
+Create a new local repository in a specific directory:
+$ git init <directory>
 local Changes
 Changed files in your working directory
 $ git status
