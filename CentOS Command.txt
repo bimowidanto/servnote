@@ -1,10 +1,14 @@
+#after install
+
+
+
 #Configure network
 #ssh
 SshMessage
 $ nano /etc/motd
-$ /etc/ssh/sshd_config
-Banner /etc/ssh-banner
-/etc/profile.d/motd.sh
+$ nano /etc/ssh/sshd_config
+: Banner /etc/ssh-banner
+$ nano /etc/profile.d/motd.sh
 #!/bin/bash
 echo -e "
 #################################### 
@@ -75,6 +79,13 @@ mode=5 (balance-tlb) : Adaptive transmit load balancing
 mode=6 (balance-alb) : Adaptive load balancing:
 #install package groups
 $ yum -y groupinstall "Base" "Development Libraries" "Development Tools"
+#Add additional essential repositories.
+$ yum -y install yum-plugin-priorities
+$ yum -y install epel-release
+$ cd /tmp
+$ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+$ ls *.rpm
+$ yum repolist
 $ yum -y install policycoreutils-python
 #disable Selinux
 -mode permissive
@@ -159,7 +170,27 @@ ns2     IN	A	192.168.122.120
 50	IN	PTR     blog.loadportas.net.
 
 
-
+#NGINX
+rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+yum -y install nginx
+systemctl start nginx
+firewall-cmd --permanent --add-service=http
+firewall-cmd --reload
+#MARIADB
+yum -y install mariadb mariadb-server
+systemctl start mariadb
+systemctl enable mariadb
+#PHP7
+yum install -y https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum install -y --enablerepo=remi-php73 php php-fpm php-mysqlnd php-cli
+nano /etc/php-fpm.d/www.conf
+listen = 127.0.0.1:9000
+Make sure the following values are UN-commented.
+[.More.]
+pm.min_spare_servers = 5
+[.More.]
+pm.max_spare_servers = 35
+[.More.]
 
 
 
@@ -201,7 +232,53 @@ vi /usr/local/nagios/etc/resource.cfg.
 $USER1$=//usr/lib64/nagios/plugins
 
 $
+-------------------------------------------------
+== Firewalld==
 
+$ sudo systemctl enable firewalld
+$ sudo systemctl start firewalld
+
+$ sudo firewall-cmd --state //cek status firewalld
+$ sudo systemctl firewalld status
+$ firewall-cmd --list-all //Melihat daftar rules yang aktif
+$ sudo firewall-cmd --get-services //Melihat semua nama services yang bisa ditambahkan ke rules
+$ sudo firewall-cmd --add-service={http,https} --permanent //Mengijinkan trafik dari port web server
+Mengijinkan port tertentu di protokol TCP
+Contoh:
+sudo firewall-cmd --add-port=1337/tcp --permanent
+Mengijinkan port tertentu di protokol UDP
+Contoh:
+sudo firewall-cmd --add-port=666/udp --permanent
+Memblokir trafik keluar dan masuk ke sistem (Panic Mode)
+sudo firewall-cmd --panic-on
+Untuk menonaktifkannya
+sudo firewall-cmd --panic-off 
+Membuat zona baru di firewalld
+Contoh
+sudo firewall-cmd --new-zone=linuxseczone --permanent
+Mengaktifkan service di zone tertentu
+Contoh
+sudo firewall-cmd --zone=linuxseczone --add-port=1337/tcp --permanent
+ sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
+Konfigurasi port forwarding di firewalld
+Mengaktifkan Masquerading
+sudo firewall-cmd --add-masquerade --permanent
+Port forwarding ke beda port di server yang sama
+Contoh
+sudo firewall-cmd --add-forward-port=port=22:proto=tcp:toport=1337 --permanent
+Port forwarding di port yang sama dari local ke remote server
+Contoh
+sudo firewall-cmd --add-forward-port=port=22:proto=tcp:toaddr=192.168.2.10 --permanent
+Port forwarding dari beda port dari port 123 di local dan port 456 di remote server
+sudo firewall-cmd --add-forward-port=port=123:proto=tcp:toport=456:toaddr=10.50.142.37 --permanent
+Menghapus rule di firewalld
+Untuk menghapus rule, tinggal ubah --add menjadi --remove
+
+Sebagai tambahan, --permanent di akhiran rule artinya bahwa rule yang ditambahkan tersebut persistence, tidak akan hilang meski sistem operasi di reboot.
+
+Mungkin itu saja beberapa perintah yang sering digunakan di firewalld. Untuk informasi lain bisa cek dengan perintah
+firewalld --help
+man firewalld
 
 
 

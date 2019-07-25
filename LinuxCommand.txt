@@ -137,7 +137,16 @@
 	  -|---|---|---		0|000|000|000		Regular files, no permissions 
 	  d|r--|r--|r--		d|400|400|400		Directory, read permission to owner, group, and others
 	  -|rw-|r--|r---|	644|644|644			Regular file, read and write permission to owner and read permission to group or others 
-	  -|rwx|rwx|rwx-|	777|777|777			Regular file, all permissions to everyone 
+	  -|rwx|rwx|rwx-|	777|777|777			Regular file, all permissions to everyone
+
+        0 = 0 = nothing
+        1 = 1 = execute
+        2 = 2 = write
+        3 = 2+1 = w+x
+        4 = 4 = read
+        5 = 4+1 = r+x
+        6 = 4+2 = r+w
+        7 = 4+2+1 = r+w+x 
 	  --------------------------------------------------------------------
 	  
       =====================================================================
@@ -363,6 +372,7 @@
           DESCRIPTION: A short textual description of what the unit is/does.
       $ systemctl list-units --all
       $ systemctl list-units --all --state=inactive
+      $ systemctl -t service -a --state running
       $ systemctl list-units --type=service
       $ systemctl list-unit-files
       $ systemctl cat atd.service

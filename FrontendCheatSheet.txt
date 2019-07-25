@@ -25,6 +25,13 @@
       docker container ls --all
       docker container ls -aq
       
+      ##Create docker container
+      docker container create --name CONTAINER_NAME -p PORT_PUBLIC:PORTDEFAULT IMAGE_NAME:VERSION
+
+      ##Dockerbuild
+      docker build --tag NAMEAPPS_TAG:DOCKER_VERSION .
+      docker build [OPTIONS] PATH | URL | -
+
       Child commands
       Command 	Description
       docker attach =	Attach local standard input, output, and error streams to a running container
