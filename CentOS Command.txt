@@ -176,6 +176,26 @@ yum -y install nginx
 systemctl start nginx
 firewall-cmd --permanent --add-service=http
 firewall-cmd --reload
+
+
+$ /etc/nginx/nginx.conf
+location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index index.php;
+        root /usr/share/nginx/html;
+        include fastcgi.conf;
+}
+
+location / {
+            root /usr/share/nginx/html;
+            index index.html index.htm index.php
+}
+
+# systemctl start php-fpm
+# systemctl enable php-fpm
+# systemctl restart nginx
+
+
 #MARIADB
 yum -y install mariadb mariadb-server
 systemctl start mariadb
@@ -192,6 +212,13 @@ pm.min_spare_servers = 5
 pm.max_spare_servers = 35
 [.More.]
 
+$ /etc/php/php.ini
+extension=pdo_mysql.so
+extension=mysqli.so
+
+$ pacman -S phpmyadmin
+
+ln -s /usr/share/webapps/phpMyAdmin/ /usr/share/nginx/html/phpmyadmin
 
 
 
