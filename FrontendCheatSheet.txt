@@ -65,13 +65,25 @@
       docker plugin =	Manage plugins
       docker port =	List port mappings or a specific mapping for the container
       docker ps =	List containers
-      docker pull =	Pull an image or a repository from a registry
+
+      docker pull =	Pull an image or a 
+      repository from a registry
+      docker pull nginx:version
+
       docker push =	Push an image or a repository to a registry
       docker rename =	Rename a container
       docker restart =	Restart one or more containers
+
       docker rm =	Remove one or more containers
       docker rmi =	Remove one or more images
+
       docker run =	Run a command in a new container
+      docker run -d nginx
+      docker run -p 8080:80 --name web --rm -v /directory/file/nginx/html nginx
+
+      #copy file on folder dir nginx 
+      docker cp index.html web:/usr/share/nginx/html
+
       docker save =	Save one or more images to a tar archive (streamed to STDOUT by default)
       docker search =	Search the Docker Hub for images
       docker secret =	Manage Docker secrets
