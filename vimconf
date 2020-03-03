@@ -1,0 +1,55 @@
+#The Ultimate vimrc
+##Install.
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+sh ~/.vim_runtime/install_awesome_vimrc.sh
+
+##update to latest version.
+cd ~/.vim_runtime
+git pull --rebase
+python update_plugins.py
+
+#Config
+##Install vim-plug
+vim-plug is a package manager for vim.
+Download vim-plug and move plug.vim to ~/.vim/autoload directory.
+
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+##Install COC
+-NodeJs
+curl -sL install-node.now.sh | sh
+
+-Yarn
+curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+
+-Create directory for COC’s installation.
+
+-Clone COC’s repo.
+cd ~/.vim/pack/coc/start
+git clone https://github.com/neoclide/coc.nvim.git --depth=1
+
+-Install COC.
+cd ~/.vim/pack/coc/start/coc.nvim
+yarn install
+
+-Add Plug for COC. Open ~/.vimrc in editor and add the lines below.
+call plug#begin()
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+call plug#end()
+
+##Install COC Extension
+Link : https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+Execute :CocInstall coc-java in the vim’s command-line mode.
+
+##Tmux
+autostartup
+~/.profile
+
+if [[ -z "$TMUX" ]]; then
+    if tmux has-session 2>/dev/null; then
+        exec tmux attach
+    else
+        exec tmux
+    fi
+fi
+
