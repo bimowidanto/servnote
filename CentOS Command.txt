@@ -4,7 +4,17 @@
 
 #Configure network
 #ssh
-SshMessage
+#ssh security
+$ nano /etc/ssh/sshd_config
+ClientAliveInterval 360
+ClientAliveCountMax 0
+PermitEmptyPasswords no
+AllowUsers user1 user2
+PermitRootLogin no
+Protocol 2
+Port 2025 #Change me
+
+#SshMessage
 $ nano /etc/motd
 $ nano /etc/ssh/sshd_config
 : Banner /etc/ssh-banner
@@ -64,7 +74,7 @@ yum -y update --skip-broken
 #yumPriorities
 yum install yum-plugin-priorities
 /etc/yum/pluginconf.d/priorities.conf
-
+dnf install epel-release -y
 
 
 $ nmtui
@@ -106,6 +116,7 @@ server 0.id.pool.ntp.org
 server 2.asia.pool.ntp.org
 server 1.asia.pool.ntp.org
 $ ntpq –p
+
 #DNS server
 $ yum -y install bind bind-utils
 #ZoneDomain
@@ -221,6 +232,17 @@ $ pacman -S phpmyadmin
 ln -s /usr/share/webapps/phpMyAdmin/ /usr/share/nginx/html/phpmyadmin
 
 
+#Docker
+$ dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+$ dnf install --nobest docker-ce
+$ dnf install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+$ systemctl enable --now docker
+#Docker-compose
+$ curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o docker-compose
+$ mv docker-compose /usr/local/bin && sudo chmod +x /usr/local/bin/docker-compose
+$ dnf install python3-pip
+$ pip3.6 install docker-compose --user
+$ 
 
 
 

@@ -1,0 +1,109 @@
+Proxmox
+
+#Backup
+$ qm list
+$ cd /var/lib/vz/dump
+$ vzdump (No VMID)
+# backup to external
+$ scp vzdump-qemu-No VMID pcbackup@ipaddr:/home/backup
+#Restore
+$ 
+
+#Centos9
+Epel :
+https://www.cyberciti.biz/faq/how-to-enable-and-install-epel-repo-on-centos-8-x/
+
+
+#java 7
+#32bit library
+yum install glibc.i686
+
+#Tomcat Centos8
+link : https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-centos-7
+$ sudo groupadd tomcat
+$ sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+$ wget https://www-eu.apache.org/dist/tomcat/
+# /opt/tomcat directory. Create the directory
+$ sudo mkdir /opt/tomcat
+$ sudo tar xvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+# tomcat group ownership over the entire installation directory:
+$ sudo chgrp -R tomcat /opt/tomcat
+$ sudo chmod -R g+r conf
+$ sudo chmod g+x conf
+$ sudo chown -R tomcat webapps/ work/ temp/ logs/
+# Install Systemd Unit File
+$ sudo vi /etc/systemd/system/tomcat.service
+
+# Systemd unit file for tomcat
+
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre -> //jdk location
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat -> //tomcat location
+Environment=CATALINA_BASE=/opt/tomcat -> //tomcat location
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+$ sudo systemctl daemon-reload
+$ sudo systemctl start tomcat
+$ sudo systemctl status tomcat
+$ sudo systemctl enable tomcat
+
+# Tomcat Web Management Interface
+$ sudo vi /opt/tomcat/conf/tomcat-users.xml
+<tomcat-users>
+    <user username="admin" password="password" roles="manager-gui,admin-gui"/>
+</tomcat-users>
+
+# Tomcat restrict access to the Manager and Host Manager apps to connections coming from the server itself.
+For the Manager app, type:
+$ sudo vi /opt/tomcat/webapps/manager/META-INF/context.xml
+For the Host Manager app, type:
+$ sudo vi /opt/tomcat/webapps/host-manager/META-INF/context.xml
+##context.xml files for Tomcat webapps
+<Context antiResourceLocking="false" privileged="true" >
+  <!--<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />-->
+</Context>
+
+
+# Firewalld
+$ firewall-cmd --zone=public --permanent --add-port=8080/tcp
+$ firewall-cmd --reload
+$ firewall-cmd --list-ports
+$ firewall-cmd --list-services
+
+
+
+
+#gitlab documentation
+> Hosts windows
+10.4.68.151	gitlablws.com
+
+ git config http.sslVerify false
+
+
+
+
+
+
+
+

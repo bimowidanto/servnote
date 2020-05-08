@@ -126,12 +126,11 @@ $ mkdir ~/portainer  ----> Create a directory on the host system to persist cont
 $ docker pull portainer/portainer
 $ docker tag portainer/portainer portainer
 $ export CONT_NAME="portainer"
-$ docker run -d -p 9000:9000 \
---restart always \
--v /var/run/docker.sock:/var/run/docker.sock \
--v ~/portainer:/data \
---name ${CONT_NAME} \
-portainer
+$ docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v ~/portainer:/data --name {CONT_NAME} portainer
+#
+$ docker volume create portainer_data
+$ docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
 
 #Windows portainer
 $ docker run -d -p 9000:9000 -v //var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
@@ -318,6 +317,10 @@ $ git reset --keep <commit>
 
 
 
+ZABBIX
+
+
+dnf -y install http://mirror.centos.org/centos/8.0.1905/AppStream/x86_64/os/Packages/libssh2-1.8.0-8.module_el8.0.0+189+f9babebb.1.x86_64.rpm
 
 
 
@@ -327,6 +330,49 @@ $ git reset --keep <commit>
 
 
 
+##Gitlab local docker
+
+sudo docker pull gitlab/gitlab-ce:latest
+
+sudo docker run --detach \
+  --hostname devlws.lan \
+  --publish 443:443 --publish 80:80 --publish 2222:22 \
+  --name gitlablws \
+  --restart always \
+  --volume /srv/gitlab/config:/etc/gitlab \
+  --volume /srv/gitlab/logs:/var/log/gitlab \
+  --volume /srv/gitlab/data:/var/opt/gitlab \
+  --env GITLAB_OMNIBUS_CONFIG="external_url 'https://gitlablws.com/';" \
+  gitlab/gitlab-ce:latest
 
 
 
+##Jenkins
+$ useradd jenkis
+$ passwd jenkins 
+ ‘/etc/sudoers’
+ jenkins     ALL=(ALL)       ALL
+$ su - jenkins
+$ sudo id
+$ sudo usermod -aG docker jenkins
+$ sudo chmod 666 /var/run/docker.sock
+##Docker-compose
+$ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ sudo chmod +x /usr/local/bin/docker-compose
+$ docker volume create [YOUR VOLUME]
+$ docker container run -d \
+    -p [YOUR PORT]:8080 \
+    -v [YOUR VOLUME]:/var/jenkins_home \
+    --name jenkins-local \
+    jenkins/jenkins:lts
+#Viewpassword jenkins
+$ docker container exec \
+    [CONTAINER ID or NAME] \
+    sh -c "cat /var/jenkins_home/secrets/initialAdminPassword"
+
+
+
+
+
+
+  
