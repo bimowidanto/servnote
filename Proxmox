@@ -94,11 +94,6 @@ $ firewall-cmd --list-services
 
 
 
-#gitlab documentation
-> Hosts windows
-10.4.68.151	gitlablws.com
-
- git config http.sslVerify false
 
 
 

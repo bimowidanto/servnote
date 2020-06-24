@@ -1,0 +1,308 @@
+## List Docker CLI commands
+      docker
+      docker container --help
+      
+      ## Display Docker version and info
+      docker --version
+      docker version
+      docker info
+      
+      ## Activ docker swap
+      nano /etc/default/grub
+      GRUB_CMDLINE_LINUX="cgroup_enable=memoryswapaccount=1"
+      update-grub 
+
+      ## Execute Docker image
+      docker run hello-world
+      docker run -it id_container bash
+	  $ sudo docker run -i -t ubuntu:14.04 /bin/bash
+	  
+      ## List Docker images
+      docker image ls
+      
+      ## List Docker containers (running, all, all in quiet mode)
+      docker container ls
+      docker container ls --all
+      docker container ls -aq
+      
+      ##Create docker container
+      docker container create --name CONTAINER_NAME -p PORT_PUBLIC:PORTDEFAULT IMAGE_NAME:VERSION
+
+      ##Dockerbuild
+      docker build --tag NAMEAPPS_TAG:DOCKER_VERSION .
+      docker build [OPTIONS] PATH | URL | -
+
+      Child commands
+      Command 	Description
+      docker attach =	Attach local standard input, output, and error streams to a running container
+      docker build =	Build an image from a Dockerfile
+      docker checkpoint =	Manage checkpoints
+      docker commit =	Create a new image from a container’s changes
+      docker config =	Manage Docker configs
+      docker container =	Manage containers
+      docker cp =	Copy files/folders between a container and the local filesystem
+      docker create =	Create a new container
+      docker deploy =	Deploy a new stack or update an existing stack
+      docker diff =	Inspect changes to files or directories on a container’s filesystem
+      docker events =	Get real time events from the server
+      docker exec =	Run a command in a running container
+      docker export =	Export a container’s filesystem as a tar archive
+      docker history =	Show the history of an image
+      docker image =	Manage images
+      docker images =	List images
+      docker import =	Import the contents from a tarball to create a filesystem image
+      docker info =	Display system-wide information
+      docker inspect =	Return low-level information on Docker objects
+      docker kill =	Kill one or more running containers
+      docker load =	Load an image from a tar archive or STDIN
+      docker login =	Log in to a Docker registry
+      docker logout =	Log out from a Docker registry
+      docker logs =	Fetch the logs of a container
+      docker manifest =	Manage Docker image manifests and manifest lists
+      docker network =	Manage networks
+      docker node =	Manage Swarm nodes
+      docker pause =	Pause all processes within one or more containers
+      docker plugin =	Manage plugins
+      docker port =	List port mappings or a specific mapping for the container
+      docker ps =	List containers
+
+      docker pull =	Pull an image or a 
+      repository from a registry
+      docker pull nginx:version
+
+      docker push =	Push an image or a repository to a registry
+      docker rename =	Rename a container
+      docker restart =	Restart one or more containers
+
+      docker rm =	Remove one or more containers
+      docker rmi =	Remove one or more images
+
+      docker run =	Run a command in a new container
+      docker run -d nginx
+      docker run -p 8080:80 --name web --rm -v /directory/file/nginx/html nginx
+
+      #copy file on folder dir nginx 
+      docker cp index.html web:/usr/share/nginx/html
+
+      docker save =	Save one or more images to a tar archive (streamed to STDOUT by default)
+      docker search =	Search the Docker Hub for images
+      docker secret =	Manage Docker secrets
+      docker service =	Manage services
+      docker stack =	Manage Docker stacks
+      docker start =	Start one or more stopped containers
+      docker stats =	Display a live stream of container(s) resource usage statistics
+      docker stop =	Stop one or more running containers
+      docker swarm =	Manage Swarm
+      docker system =	Manage Docker
+      docker tag =	Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+      docker top =	Display the running processes of a container
+      docker trust =	Manage trust on Docker images
+      docker unpause =	Unpause all processes within one or more containers
+      docker update =	Update configuration of one or more containers
+      docker version =	Show the Docker version information
+      docker volume =	Manage volumes
+      docker wait =	Block until one or more containers stop, then print their exit codes
+
+======================================================================================================
+Installing Docker & kubernetes
+======================================================================================================
+sudo apt-get autoremove -y docker-engine \
+&& sudo apt-get purge docker-engine -y \
+&& sudo rm -rf /etc/docker/ \
+&& sudo rm -f /etc/systemd/system/multi-user.target.wants/docker.service \
+&& sudo rm -rf /var/lib/docker \
+&&  sudo systemctl daemon-reload
+
+$ sudo usermod -aG docker SOMEUSERNAME
+$ newgrp docker
+
+##Docker-compose
+$ sudo wget -O  /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/1.25.0/docker-compose-Linux-x86_64
+$ sudo chmod +x /usr/local/bin/docker-compose
+
+arch
+$ pacman -S qemu virt-manager virt-viewer dnsmasq iptables vde2 bridge-utils openbsd-netcat
+$ wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 -O  /usr/local/bin/minikube
+$ yaourt -Sy minikube-bin
+$ curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+
+#---------------------------------------------------------------
+#PORTAINER
+#---------------------------------------------------------------
+$ mkdir ~/portainer_data ----> Create a directory on the host system to persist container data
+$ docker pull portainer/portainer
+$ docker tag portainer/portainer portainer
+$ export CONT_NAME="portainer"
+$ docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v ~/portainer_data:/data --name {CONT_NAME} portainer
+#
+$ docker volume create portainer_data
+$ docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v ~/portainer_data:/data portainer/portainer
+
+
+#Windows portainer
+$ docker run -d -p 9000:9000 -v //var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+$ docker volume create portainer_data
+$ docker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+##This issue applies to: RHEL/CentOS 7.x and later
+#By default, firewalld will block intercontainer networking on the same docker host. To allow communication between the docker containers, run the following commands:
+$ firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 4 -i docker0 -j ACCEPT
+$ firewall-cmd --reload
+After reloading firewall-cmd, please reload the docker daemon:
+
+$ systemctl restart docker
+This can be the solution, but other factors may be the cause as well.
+
+
+
+
+# ------------------------------------
+# Docker alias and function
+# ------------------------------------
+
+# Get latest container ID
+alias dl="docker ps -l -q"
+# Get container process
+alias dps="docker ps"
+# Get process included stop container
+alias dpa="docker ps -a"
+# Get images
+alias di="docker images"
+# Get container IP
+alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+# Run deamonized container, e.g., $dkd base /bin/echo hello
+alias dkd="docker run -d -P"
+# Run interactive container, e.g., $dki base /bin/bash
+alias dki="docker run -i -t -P"
+# Execute interactive container, e.g., $dex base /bin/bash
+alias dex="docker exec -i -t"
+# Stop all containers
+dstop() { docker stop $(docker ps -a -q); }
+# Remove all containers
+drm() { docker rm $(docker ps -a -q); }
+# Stop and Remove all containers
+alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+# Remove all images
+dri() { docker rmi $(docker images -q); }
+# Dockerfile build, e.g., $dbu tcnksm/test 
+dbu() { docker build -t=$1 .; }
+# Show all alias related docker
+dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
+# Bash into running container
+dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
+
+===========================================
+-------------------------------------------
+##APACHEKAFKA
+-------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ZABBIX
+
+
+dnf -y install http://mirror.centos.org/centos/8.0.1905/AppStream/x86_64/os/Packages/libssh2-1.8.0-8.module_el8.0.0+189+f9babebb.1.x86_64.rpm
+
+
+
+
+
+
+
+
+
+##Gitlab local docker
+
+sudo docker pull gitlab/gitlab-ce:latest
+
+sudo docker run --detach \
+  --hostname devlws.lan \
+  --publish 443:443 --publish 80:80 --publish 2222:22 \
+  --name gitlablws \
+  --restart always \
+  --volume /srv/gitlab/config:/etc/gitlab \
+  --volume /srv/gitlab/logs:/var/log/gitlab \
+  --volume /srv/gitlab/data:/var/opt/gitlab \
+  --env GITLAB_OMNIBUS_CONFIG="external_url 'https://gitlablws.com/';" \
+  gitlab/gitlab-ce:latest
+
+sudo docker run --detach \
+--hostname devlws.co.id \
+--env GITLAB_OMNIBUS_CONFIG="external_url 'http://10.4.68.150:32782/'" \
+--publish 32781:443 --publish 32782:32782 --publish 32783:7222 \
+--name gitlablws \
+--restart always \
+--volume /srv/gitlab/config:/etc/gitlab \
+--volume /srv/gitlab/logs:/var/log/gitlab \
+--volume /srv/gitlab/data:/var/opt/gitlab \
+gitlab/gitlab-ce:latest
+
+
+------------------------------------------------------------------------------
+oddo
+------------------------------------------------------------------------------
+docker run -d --name odoo-db  \
+  --env POSTGRES_USER=odoo --env POSTGRES_PASSWORD=lws1234 \
+  --env POSTGRES_DB=postgres \
+  --network=odoo-nw --mount source=odoo-db-data,target=/var/lib/postgresql/data  \
+  library/postgres:latest
+
+docker volume create --name odoo-data
+docker volume create --name odoo-extra-addons
+
+docker run -d --name odoo-lws --link odoo-db:db -p 8069:8069 \
+  --network odoo-nw \
+  --mount source=odoo-data,target=/var/lib/odoo \
+  --mount source=odoo-extra-addons,target=/mnt/extra-addons \
+  --env POSTGRES_PASSWORD=lws1234 \
+  odoo:13.0
+
+
+
+##Jenkins
+$ useradd jenkis
+$ passwd jenkins 
+ ‘/etc/sudoers’
+ jenkins     ALL=(ALL)       ALL
+$ su - jenkins
+$ sudo id
+$ sudo usermod -aG docker jenkins
+$ sudo chmod 666 /var/run/docker.sock
+##Docker-compose
+$ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+$ sudo chmod +x /usr/local/bin/docker-compose
+$ docker volume create [YOUR VOLUME]
+$ docker container run -d \
+    -p [YOUR PORT]:8080 \
+    -v [YOUR VOLUME]:/var/jenkins_home \
+    --name jenkins-local \
+    jenkins/jenkins:lts
+#Viewpassword jenkins
+$ docker container exec \
+    [CONTAINER ID or NAME] \
+    sh -c "cat /var/jenkins_home/secrets/initialAdminPassword"
+
+
+
+
+
+
+  
